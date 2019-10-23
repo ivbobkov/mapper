@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using TinyMapper.Core;
 
 namespace TinyMapper.Builders
 {
@@ -9,7 +10,7 @@ namespace TinyMapper.Builders
 
         IMappingBuilder<TSource, TReceiver> Include(params IAction<TSource, TReceiver>[] actions);
 
-        IMappingBuilder<TSource, TReceiver> ActionFor<TReceiverProperty>(
+        IMappingBuilder<TSource, TReceiver> For<TReceiverProperty>(
             Expression<Func<TReceiver, TReceiverProperty>> receiverSelector,
             Func<IActionBuilder<TSource, TReceiver, TReceiverProperty>, ICanAddResolve<TSource, TReceiver>> buildFunction);
 

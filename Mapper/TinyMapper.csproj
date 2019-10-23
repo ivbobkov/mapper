@@ -4,4 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Builders\AssignAction\" />
+    <Folder Include="Builders\ConditionalAssignAction\" />
+  </ItemGroup>
+
 </Project>

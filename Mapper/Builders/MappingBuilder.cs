@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using TinyMapper.Core;
 
 namespace TinyMapper.Builders
 {
@@ -10,11 +11,9 @@ namespace TinyMapper.Builders
         private readonly List<IAction<TSource, TReceiver>> _actions = new List<IAction<TSource, TReceiver>>();
         private Action<TSource, TReceiver> _afterMap = (_, __) => { };
 
-        public IMappingBuilder<TSource, TReceiver> ExecuteIf(Expression<Func<TSource, bool>> clause)
+        public IMappingBuilder<TSource, TReceiver> ExecuteIf(IClause<TSource> clause)
         {
-            _executionClause = clause ?? throw new ArgumentNullException(nameof(clause));
-
-            return this;
+            throw new NotImplementedException();
         }
 
         public IMappingBuilder<TSource, TReceiver> Include(params IAction<TSource, TReceiver>[] actions)
@@ -29,7 +28,7 @@ namespace TinyMapper.Builders
             return this;
         }
 
-        public IMappingBuilder<TSource, TReceiver> ActionFor<TReceiverProperty>(
+        public IMappingBuilder<TSource, TReceiver> For<TReceiverProperty>(
             Expression<Func<TReceiver, TReceiverProperty>> receiverSelector,
             Func<IActionBuilder<TSource, TReceiver, TReceiverProperty>, ICanAddResolve<TSource, TReceiver>> buildFunction)
         {
