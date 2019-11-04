@@ -1,7 +1,7 @@
 ﻿namespace TinyMapper
 {
-    public interface IMapper<TSource, TReceiver>
+    public interface IMapper
     {
-        TReceiver Map(TSource source);
+        TReceiver Map<TSource, TReceiver>(TSource source);
     }
 }

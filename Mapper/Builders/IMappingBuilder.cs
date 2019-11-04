@@ -6,7 +6,7 @@ namespace TinyMapper.Builders
 {
     public interface IMappingBuilder<TSource, TReceiver>
     {
-        IMappingBuilder<TSource, TReceiver> ExecuteIf(Expression<Func<TSource, bool>> clause);
+        IMappingBuilder<TSource, TReceiver> ExecuteIf<TClause>(TClause clause) where TClause : IClause<TSource, TClause>;
 
         IMappingBuilder<TSource, TReceiver> Include(params IAction<TSource, TReceiver>[] actions);
 

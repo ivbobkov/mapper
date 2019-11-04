@@ -2,14 +2,14 @@
 
 namespace TinyMapper
 {
-    public class MappingProvider<TSource, TReceiver> : IMappingProvider<TSource, TReceiver>
+    public class MappingProvider : IMappingProvider
     {
-        public void RegisterProfile(MappingProfileBase<TSource, TReceiver> profile)
+        public void RegisterProfile(MappingProfileBase profile)
         {
             throw new NotImplementedException();
         }
 
-        public Func<TSource, TReceiver> GetMapperFunc()
+        public Func<TSource, TReceiver> GetTypedMappingFunc<TSource, TReceiver>()
         {
             throw new NotImplementedException();
         }

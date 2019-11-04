@@ -11,8 +11,8 @@
         public const string MaxDiameter = "D MAX";
         public const string MinDiameter = "D MIN";
         public const string ShankDiameter = "D SHANK";
-        public const string CuttingEdgeDiameter = "DC";
-        public const string CuttingEdgeDiameter2 = "DC2";
+        public const string DC = "DC";
+        public const string DC2 = "DC2";
         public const string CuttingEdgeDiameter3 = "DC3";
         public const string MillingCutterHeight = "H";
         public const string TwistDirection = "HELIX";
@@ -34,7 +34,7 @@
         public const string MinorDiameter = "D INSIDE";
         public const string MajorDiameterStep1 = "D1";
         public const string MajorDiameterStep2 = "D2";
-        public const string SettingAngle = "A KAPPA";
+        public const string A_KAPPA = "A KAPPA";
         public const string CorpusDiameter = "DA";
         public const string CoilLength = "WIDTH";
         public const string ToolHolderDiameter = "D";

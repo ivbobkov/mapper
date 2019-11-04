@@ -1,20 +1,14 @@
-﻿using System;
-using TinyMapper.Builders;
+﻿using TinyMapper.Builders;
 
 namespace TinyMapper
 {
-    public abstract class MappingProfileBase<TSource, TReceiver>
+    public abstract class MappingProfileBase
     {
-        public IMapping<TSource, TReceiver> Build()
+        protected IMappingBuilder<TSource, TReceiver> DefineMapping<TSource, TReceiver>()
         {
-            throw new NotImplementedException();
-        }
+            //var mappingBuilder = new MappingProfile<TSource, TReceiver>();
 
-        protected IMappingBuilder<TSource, TReceiver> DefineMapping()
-        {
-            var mappingBuilder = new MappingBuilder<TSource, TReceiver>();
-
-            return mappingBuilder;
+            return null;
         }
     }
 }

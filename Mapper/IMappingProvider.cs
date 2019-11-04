@@ -2,9 +2,9 @@
 
 namespace TinyMapper
 {
-    public interface IMappingProvider<TSource, TReceiver>
+    public interface IMappingProvider
     {
-        void RegisterProfile(MappingProfileBase<TSource, TReceiver> profile);
-        Func<TSource, TReceiver> GetMapperFunc();
+        void RegisterProfile(MappingProfileBase profile);
+        Func<TSource, TReceiver> GetTypedMappingFunc<TSource, TReceiver>();
     }
 }
