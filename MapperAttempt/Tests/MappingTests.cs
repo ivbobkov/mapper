@@ -20,9 +20,9 @@ namespace TinyMapper.Tests.Tests
                     new PropertyMap
                     {
                         ReceiverMember = Expression.Parameter(typeof(double?), "PointDiameter"),
-                        MemberMaps =
+                        ValueResolvingActions =
                         {
-                            new MemberMap(
+                            new ValueResolvingAction(
                                 new BlankCondition<FakeCatalog>(),
                                 Resolve.Constant(0d))
                         }
@@ -30,9 +30,9 @@ namespace TinyMapper.Tests.Tests
                     new PropertyMap
                     {
                         ReceiverMember = Expression.Parameter(typeof(double?), "PointAngle"),
-                        MemberMaps =
+                        ValueResolvingActions =
                         {
-                            new MemberMap(
+                            new ValueResolvingAction(
                                 new BlankCondition<FakeCatalog>(),
                                 Resolve.PointFromSettingAngle("A KAPPA"))
                         }
@@ -40,12 +40,12 @@ namespace TinyMapper.Tests.Tests
                     new PropertyMap
                     {
                         ReceiverMember = Expression.Parameter(typeof(double?), "CornerRadius"),
-                        MemberMaps =
+                        ValueResolvingActions =
                         {
-                            new MemberMap(
+                            new ValueResolvingAction(
                                 Has.Parameter("R CORNER"),
                                 Resolve.DoubleFromParameter("R CORNER")),
-                            new MemberMap(new BlankCondition<FakeCatalog>(), Resolve.Constant(0d))
+                            new ValueResolvingAction(new BlankCondition<FakeCatalog>(), Resolve.Constant(0d))
                         }
                     }
                 }

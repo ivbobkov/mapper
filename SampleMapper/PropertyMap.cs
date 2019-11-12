@@ -6,7 +6,7 @@ namespace SampleMapper
     public class PropertyMap
     {
         public ParameterExpression ReceiverMember { get; set; }
-        public List<MemberMap> MemberMaps { get; set; }
+        public List<ValueResolvingAction> ValueResolvingActions { get; set; }
     }
 
     // https://github.com/AutoMapper/AutoMapper/tree/master/src/AutoMapper

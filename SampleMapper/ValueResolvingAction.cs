@@ -1,8 +1,8 @@
 ﻿namespace SampleMapper
 {
-    public class MemberMap
+    public class ValueResolvingAction
     {
-        public MemberMap(ICondition condition, IValueResolver valueResolver)
+        public ValueResolvingAction(ICondition condition, IValueResolver valueResolver)
         {
             Condition = condition;
             ValueResolver = valueResolver;

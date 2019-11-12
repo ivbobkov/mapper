@@ -41,7 +41,7 @@ namespace SampleMapper.Configurators
             var propertyMap = new PropertyMap
             {
                 ReceiverMember = receiverMember.Parameters.Single(),
-                MemberMaps = configurator.MemberMaps
+                ValueResolvingActions = configurator.MemberMaps
             };
 
             _propertyMaps.Add(propertyMap);

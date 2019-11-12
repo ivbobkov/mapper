@@ -7,7 +7,7 @@ namespace SampleMapper.Configurators
         IMemberMapsBuilder<TSource, TReceiverMember>,
         ICanAddDo<TSource, TReceiverMember>
     {
-        public List<MemberMap> MemberMaps { get; } = new List<MemberMap>();
+        public List<ValueResolvingAction> MemberMaps { get; } = new List<ValueResolvingAction>();
 
         private Condition<TSource> _condition;
         private ValueResolver<TSource, TReceiverMember> _resolver;
@@ -24,7 +24,7 @@ namespace SampleMapper.Configurators
                 throw new InvalidOperationException();
             }
 
-            MemberMaps.Add(new MemberMap(new BlankCondition<TSource>(), resolver));
+            MemberMaps.Add(new ValueResolvingAction(new BlankCondition<TSource>(), resolver));
         }
 
         ICanAddDo<TSource, TReceiverMember> IMemberMapsBuilder<TSource, TReceiverMember>.If(Condition<TSource> condition)
@@ -41,7 +41,7 @@ namespace SampleMapper.Configurators
 
         void ICanAddDo<TSource, TReceiverMember>.Do(ValueResolver<TSource, TReceiverMember> resolver)
         {
-            MemberMaps.Add(new MemberMap(_condition, resolver));
+            MemberMaps.Add(new ValueResolvingAction(_condition, resolver));
             _condition = null;
             _resolver = null;
         }
