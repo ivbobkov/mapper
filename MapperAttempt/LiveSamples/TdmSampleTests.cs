@@ -38,7 +38,7 @@ namespace TinyMapper.Tests.LiveSamples
                     .If(x => x.Has(DC, DC2))
                     .Assign(c => c.Double(DC2))
                     .Else.If(x => x.Has(DC, A_KAPPA))
-                    .Assign(c => /* Math.Atan(c.Double("DC2")) ... */ 0)
+                    .Assign(c => /* Math.Atan(c.DoubleFromParameter("DC2")) ... */ 0)
                     .Else.If(x => x.Absence(DC2) && x.Double(A_KAPPA) == 90).Assign(0)
                     .Else.Assign(default(double?))
                 )
@@ -99,15 +99,15 @@ namespace TinyMapper.Tests.LiveSamples
                 //actionBuilders
                 //    .For(x => x.Id, x => x.Assign(c => c.CatalogId))
                 //    .For(x => x.ArticleNumber, x => x.Assign(c => c.CatalogId))
-                //    .For(x => x.BodyDiameter, x => x.Assign(c => c.Double(BodyDiameter)))
+                //    .For(x => x.BodyDiameter, x => x.Assign(c => c.DoubleFromParameter(BodyDiameter)))
                 //    .For(x => x.HasCooling, x => x.Assign(c => c.Boolean(Coolant)))
-                //    .For(x => x.DC, x => x.Assign(c => c.Double(DC)))
-                //    .For(x => x.CuttingEdgeLength, x => x.Assign(c => c.Double(CuttingEdgeLength)))
-                //    .For(x => x.GaugeLength, x => x.Assign(c => c.Double(GaugeLength)))
-                //    .For(x => x.HelixAngle, x => x.Assign(c => c.Double(HelixAngle)))
-                //    .For(x => x.ShankDiameter, x => x.Assign(c => c.Double(ShankDiameter)))
-                //    .For(x => x.TotalLength, x => x.Assign(c => c.Double(ShankDiameter)))
-                //    .For(x => x.EdgeNumber, x => x.Assign(c => c.Double(CuttingEdgeCount)));
+                //    .For(x => x.DC, x => x.Assign(c => c.DoubleFromParameter(DC)))
+                //    .For(x => x.CuttingEdgeLength, x => x.Assign(c => c.DoubleFromParameter(CuttingEdgeLength)))
+                //    .For(x => x.GaugeLength, x => x.Assign(c => c.DoubleFromParameter(GaugeLength)))
+                //    .For(x => x.HelixAngle, x => x.Assign(c => c.DoubleFromParameter(HelixAngle)))
+                //    .For(x => x.ShankDiameter, x => x.Assign(c => c.DoubleFromParameter(ShankDiameter)))
+                //    .For(x => x.TotalLength, x => x.Assign(c => c.DoubleFromParameter(ShankDiameter)))
+                //    .For(x => x.EdgeNumber, x => x.Assign(c => c.DoubleFromParameter(CuttingEdgeCount)));
 
                 //return actionBuilders.Compile();
             }

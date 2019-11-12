@@ -48,7 +48,7 @@ namespace TinyMapper.Builders
 
         //public IMapping<TSource, TReceiver> Build()
         //{
-        //    return new Mapping<TSource, TReceiver>(
+        //    return new ProfileMap<TSource, TReceiver>(
         //        _executionClause,
         //        _actions,
         //        _afterMap);

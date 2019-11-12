@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace TinyMapper.Core2
+namespace SampleMapper
 {
     public static class ClauseExtensions
     {

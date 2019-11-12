@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace TinyMapper.Core2
+namespace SampleMapper
 {
     public abstract class MappingProfile
     {
@@ -13,8 +13,7 @@ namespace TinyMapper.Core2
 
     public interface IMappingBuilder<TSource, TReceiver>
     {
-        IMappingBuilder<TSource, TReceiver> For<TReceiverMember>(
-            Expression<Func<TReceiver, TReceiverMember>> receiverMember);
+        IMappingBuilder<TSource, TReceiver> For<TReceiverMember>(Expression<Func<TReceiver, TReceiverMember>> receiverMember);
         IMappingBuilder<TSource, TReceiver> Include();
         IMappingBuilder<TSource, TReceiver> ExecuteIf(Clause<TSource> clause);
     }
