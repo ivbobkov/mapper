@@ -4,7 +4,12 @@ namespace SampleMapper
 {
     public class ProfileMap
     {
-        public TypePair TypePair { get; set; }
+        public ProfileMap(TypePair typePair)
+        {
+            TypePair = typePair;
+        }
+
+        public TypePair TypePair { get; }
         public ICondition Condition { get; set; }
         public List<PropertyMap> PropertyMaps { get; set; }
     }

@@ -112,18 +112,6 @@ namespace TinyMapper.Tests.Tests
         }
     }
 
-    public static class Clauses
-    {
-        public static Expression<Func<FakeCatalog, bool>> ByClassAndGroup(string @class, string @group)
-        {
-            Expression<Func<FakeCatalog, bool>> clause = input =>
-                input.ToolClassId.Equals(@class)
-                && input.ToolGroupId.Equals(@group);
-
-            return clause;
-        }
-    }
-
     public static class Angles
     {
         public static readonly Expression<Func<double?, double?>> SettingToSigma = (input) => input.HasValue ? 180 - input * 2 : input;

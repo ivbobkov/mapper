@@ -63,15 +63,13 @@ namespace TinyMapper.Tests.Tests
             };
         }
 
-        
-
-        public class FaceMillProfile : ProfileConfigurator
+        public class FaceMillProfilesBuilder : ProfilesBuilder
         {
-            public FaceMillProfile()
+            public FaceMillProfilesBuilder()
             {
-                Define<FakeCatalog, FakeToolDto>()
+                CreateProfile<FakeCatalog, FakeToolDto>()
                     .Condition(Has.Class(ToolClasses.M04) && Has.Group(ToolGroups.G_01))
-                    .Include(/* TO BE DONE */)
+                    .Include( /* TO BE DONE */)
                     .For(x => x.PointDiameter, x => x.Do(Resolve.Constant(new double?(0))))
                     .For(x => x.PointAngle, x => x.Do(Resolve.PointFromSettingAngle(A_KAPPA)))
                     .For(x => x.CornerRadius, x =>
@@ -80,9 +78,9 @@ namespace TinyMapper.Tests.Tests
                         x.Do(Resolve.Constant(new double?(0)));
                     });
 
-                Define<FakeCatalog, FakeToolDto>()
+                CreateProfile<FakeCatalog, FakeToolDto>()
                     .Condition(Has.Class(ToolClasses.M04) && Has.Group(ToolGroups.G_04))
-                    .Include(/* TO BE DONE */)
+                    .Include( /* TO BE DONE */)
                     .For(x => x.PointDiameter, x =>
                     {
                         x.If(Has.Parameters(DC, DC2)).Do(Resolve.DoubleFromParameter(DC2));
