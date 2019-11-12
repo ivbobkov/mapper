@@ -1,60 +1,58 @@
 ﻿using System;
 using System.Linq.Expressions;
 using NUnit.Framework;
+using TinyMapper.Tests.LiveSamples;
 using TinyMapper.Tests.LiveSamples.Test;
-using static TinyMapper.Tests.LiveSamples.ToolClassFields;
-using static TinyMapper.Tests.LiveSamples.ToolClasses;
-using static TinyMapper.Tests.LiveSamples.ToolGroups;
 
-namespace TinyMapper.Tests.LiveSamples
+namespace TinyMapper.Tests.Tests
 {
     public class FaceMillMappingProfile : MappingProfileBase
     {
         public FaceMillMappingProfile()
         {
             DefineMapping<FakeCatalog, FakeToolDto>()
-                .ExecuteIf(new ClassGroupClause(M04, G_01))
+                .ExecuteIf(new ClassGroupClause(ToolClasses.M04, ToolGroups.G_01))
                 //.ExecuteIf(x => x.ToolClassId.Equals(M04) && x.ToolGroupId.Equals(G_01))
                 .Include()
                 .For(x => x.PointDiameter, a => a.Assign(0))
-                .For(x => x.PointAngle, a => a.Assign(c => c.Double(A_KAPPA), Angles.SettingToSigma))
+                .For(x => x.PointAngle, a => a.Assign(c => c.Double(ToolClassFields.A_KAPPA), Angles.SettingToSigma))
                 .For(x => x.CornerRadius, a => a
-                    .If(c => c.Has(CornerRadius)).Assign(c => c.Double(CornerRadius))
+                    .If(c => c.Has(ToolClassFields.CornerRadius)).Assign(c => c.Double(ToolClassFields.CornerRadius))
                     .Else.Assign(0));
 
             DefineMapping<FakeCatalog, FakeToolDto>()
-                .ExecuteIf(new ClassGroupClause(M04, G_03))
+                .ExecuteIf(new ClassGroupClause(ToolClasses.M04, ToolGroups.G_03))
                 //.ExecuteIf(x => x.ToolClassId.Equals(M04) && x.ToolGroupId.Equals(G_03))
                 .Include()
                 .For(x => x.PointDiameter, x => x.Assign(0))
-                .For(x => x.PointAngle, x => x.Assign(c => c.Double(A_KAPPA), Angles.SettingToSigma))
+                .For(x => x.PointAngle, x => x.Assign(c => c.Double(ToolClassFields.A_KAPPA), Angles.SettingToSigma))
                 .For(x => x.CornerRadius, x => x.Assign(0));
 
             DefineMapping<FakeCatalog, FakeToolDto>()
-                .ExecuteIf(new ClassGroupClause(M04, G_04))
+                .ExecuteIf(new ClassGroupClause(ToolClasses.M04, ToolGroups.G_04))
                 //.ExecuteIf(x => x.ToolClassId.Equals(M04) && x.ToolGroupId.Equals(G_04))
                 .Include()
                 .For(x => x.PointDiameter, a => a
-                    .If(x => x.Has(DC, DC2))
-                    .Assign(c => c.Double(DC2))
-                    .Else.If(x => x.Has(DC, A_KAPPA))
+                    .If(x => x.Has(ToolClassFields.DC, ToolClassFields.DC2))
+                    .Assign(c => c.Double(ToolClassFields.DC2))
+                    .Else.If(x => x.Has(ToolClassFields.DC, ToolClassFields.A_KAPPA))
                     .Assign(c => /* Math.Atan(c.DoubleFromParameter("DC2")) ... */ 0)
-                    .Else.If(x => x.Absence(DC2) && x.Double(A_KAPPA) == 90).Assign(0)
+                    .Else.If(x => x.Absence(ToolClassFields.DC2) && x.Double(ToolClassFields.A_KAPPA) == 90).Assign(0)
                     .Else.Assign(default(double?))
                 )
-                .For(x => x.PointAngle, a => a.Assign(c => c.Double(A_KAPPA), Angles.SettingToSigma))
+                .For(x => x.PointAngle, a => a.Assign(c => c.Double(ToolClassFields.A_KAPPA), Angles.SettingToSigma))
                 .For(x => x.CornerRadius, action => action
-                    .If(c => c.Has(CornerRadius)).Assign(c => c.Double(CornerRadius))
+                    .If(c => c.Has(ToolClassFields.CornerRadius)).Assign(c => c.Double(ToolClassFields.CornerRadius))
                     .Else.Assign(0)
                 );
 
             DefineMapping<FakeCatalog, FakeToolDto>()
-                .ExecuteIf(new ClassGroupClause(M04, G_04))
+                .ExecuteIf(new ClassGroupClause(ToolClasses.M04, ToolGroups.G_04))
                 .Include()
                 .For(x => x.PointDiameter, a => a.Assign(0))
-                .For(x => x.PointAngle, a => a.Assign(c => c.Double(A_KAPPA), Angles.SettingToSigma))
+                .For(x => x.PointAngle, a => a.Assign(c => c.Double(ToolClassFields.A_KAPPA), Angles.SettingToSigma))
                 .For(x => x.CornerRadius, a => a
-                    .If(c => c.Has(CornerRadius)).Assign(c => c.Double(CornerRadius))
+                    .If(c => c.Has(ToolClassFields.CornerRadius)).Assign(c => c.Double(ToolClassFields.CornerRadius))
                     .Else.Assign(0)
                 );
         }

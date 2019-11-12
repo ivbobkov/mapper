@@ -1,7 +1,6 @@
-using System.Linq;
 using NUnit.Framework;
 
-namespace TinyMapper.Tests
+namespace TinyMapper.Tests.Garbage
 {
     [TestFixture]
     public class ActionsBuilderTests

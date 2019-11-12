@@ -5,29 +5,29 @@ namespace TinyMapper.Tests
 {
     public static class Has
     {
-        public static Clause<FakeCatalog> Parameter(string parameterName)
+        public static Condition<FakeCatalog> Parameter(string parameterName)
         {
-            return new HasParameterClause(parameterName);
+            return new HasParameterCondition(parameterName);
         }
 
-        public static Clause<FakeCatalog> Parameters(params string[] parameterNames)
+        public static Condition<FakeCatalog> Parameters(params string[] parameterNames)
         {
-            return new HasParametersClause(parameterNames);
+            return new HasParametersCondition(parameterNames);
         }
 
-        public static Clause<FakeCatalog> Value<TValue>(string parameterName, TValue parameterValue)
+        public static Condition<FakeCatalog> Value<TValue>(string parameterName, TValue parameterValue)
         {
-            return new HasValueClause<TValue>(parameterName, parameterValue);
+            return new HasValueCondition<TValue>(parameterName, parameterValue);
         }
 
-        public static Clause<FakeCatalog> Class(string className)
+        public static Condition<FakeCatalog> Class(string className)
         {
-            return new HasClassClause(className);
+            return new HasClassCondition(className);
         }
 
-        public static Clause<FakeCatalog> Group(string groupName)
+        public static Condition<FakeCatalog> Group(string groupName)
         {
-            return new HasGroupClause(groupName);
+            return new HasGroupCondition(groupName);
         }
     }
 }

@@ -5,9 +5,9 @@ namespace TinyMapper.Tests
 {
     public static class Absence
     {
-        public static Clause<FakeCatalog> Parameter(string parameterName)
+        public static Condition<FakeCatalog> Parameter(string parameterName)
         {
-            return new NotClause<FakeCatalog>(new HasParameterClause(parameterName));
+            return new NotCondition<FakeCatalog>(new HasParameterCondition(parameterName));
         }
     }
 }

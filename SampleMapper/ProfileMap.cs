@@ -2,11 +2,10 @@
 
 namespace SampleMapper
 {
-    public class ProfileMap<TSource, TReceiver>
+    public class ProfileMap
     {
-        //public MemberInfo MemberInfo { get; set; }
-
-        public Clause<TSource> Condition { get; set; }
-        public List<PropertyMap<TSource>> MappingExpressions { get; set; }
+        public TypePair TypePair { get; set; }
+        public ICondition Condition { get; set; }
+        public List<PropertyMap> PropertyMaps { get; set; }
     }
 }

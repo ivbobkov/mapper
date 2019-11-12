@@ -7,9 +7,9 @@ using TinyMapper.Tests.LiveSamples;
 
 namespace TinyMapper.Tests
 {
-    public class HasValueClause<TValue> : Clause<FakeCatalog>
+    public class HasValueCondition<TValue> : Condition<FakeCatalog>
     {
-        public HasValueClause(string parameterName, TValue parameterValue)
+        public HasValueCondition(string parameterName, TValue parameterValue)
         {
             ParameterName = parameterName;
             ParameterValue = parameterValue;
@@ -18,7 +18,7 @@ namespace TinyMapper.Tests
         public string ParameterName { get; }
         public TValue ParameterValue { get; }
 
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return catalog =>
                 catalog.CatalogValues.Any(c => c.Code.Equals(ParameterName))
@@ -26,69 +26,69 @@ namespace TinyMapper.Tests
         }
     }
 
-    public class HasParameterClause : Clause<FakeCatalog>
+    public class HasParameterCondition : Condition<FakeCatalog>
     {
-        public HasParameterClause(string parameterName)
+        public HasParameterCondition(string parameterName)
         {
             ParameterName = parameterName;
         }
 
         public string ParameterName { get; }
 
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return catalog => catalog.Has(ParameterName);
         }
     }
 
-    public class HasParametersClause : Clause<FakeCatalog>
+    public class HasParametersCondition : Condition<FakeCatalog>
     {
         public IEnumerable<string> ParameterNames { get; }
 
-        public HasParametersClause(IEnumerable<string> parameterNames)
+        public HasParametersCondition(IEnumerable<string> parameterNames)
         {
             ParameterNames = parameterNames;
         }
 
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return catalog => ParameterNames.All(x => catalog.CatalogValues.Any(c => c.Code.Equals(x)));
         }
     }
 
-    public class HasClassClause : Clause<FakeCatalog>
+    public class HasClassCondition : Condition<FakeCatalog>
     {
         public string ClassName { get; }
 
-        public HasClassClause(string className)
+        public HasClassCondition(string className)
         {
             ClassName = className;
         }
 
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return catalog => catalog.ToolClassId.Equals(ClassName);
         }
     }
 
-    public class HasGroupClause : Clause<FakeCatalog>
+    public class HasGroupCondition : Condition<FakeCatalog>
     {
         public string GroupName { get; }
 
-        public HasGroupClause(string groupName)
+        public HasGroupCondition(string groupName)
         {
             GroupName = groupName;
         }
 
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return catalog => catalog.ToolGroupId.Equals(GroupName);
         }
     }
 
-    public class AlwaysTrueClause : Clause<FakeCatalog>
+    public class BlankCondition : Condition<FakeCatalog>
     {
-        public override Expression<Func<FakeCatalog, bool>> ToExpression()
+        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
         {
             return _ => true;
         }

@@ -3,11 +3,10 @@ using System.Linq.Expressions;
 
 namespace SampleMapper
 {
-    public class PropertyMap<TSource>
+    public class PropertyMap
     {
-        // MemberInfo
         public ParameterExpression ReceiverMember { get; set; }
-        public List<MappingAction<TSource>> MappingActions { get; set; }
+        public List<MemberMap> MemberMaps { get; set; }
     }
 
     // https://github.com/AutoMapper/AutoMapper/tree/master/src/AutoMapper

@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Builders\AssignAction\" />
-    <Folder Include="Builders\ConditionalAssignAction\" />
+    <Compile Remove="Builders\AssignAction\**" />
+    <Compile Remove="Builders\ConditionalAssignAction\**" />
+    <EmbeddedResource Remove="Builders\AssignAction\**" />
+    <EmbeddedResource Remove="Builders\ConditionalAssignAction\**" />
+    <None Remove="Builders\AssignAction\**" />
+    <None Remove="Builders\ConditionalAssignAction\**" />
   </ItemGroup>
 
   <ItemGroup>
