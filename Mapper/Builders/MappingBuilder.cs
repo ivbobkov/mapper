@@ -30,7 +30,7 @@ namespace TinyMapper.Builders
 
         //public IMappingBuilder<TSource, TReceiver> For<TReceiverProperty>(
         //    Expression<Func<TReceiver, TReceiverProperty>> receiverSelector,
-        //    Func<IActionBuilder<TSource, TReceiver, TReceiverProperty>, ICanAddResolve<TSource, TReceiver>> buildFunction)
+        //    Func<IActionBuilder<TSource, TReceiver, TReceiverProperty>, ICanAddDo<TSource, TReceiver>> buildFunction)
         //{
         //    var builder = new ActionBuilder<TSource, TReceiver, TReceiverProperty>(receiverSelector);
         //    var action = buildFunction(builder).Resolve();

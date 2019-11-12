@@ -85,12 +85,4 @@ namespace TinyMapper.Tests
             return catalog => catalog.ToolGroupId.Equals(GroupName);
         }
     }
-
-    public class BlankCondition : Condition<FakeCatalog>
-    {
-        public override Expression<Func<FakeCatalog, bool>> CreateCondition()
-        {
-            return _ => true;
-        }
-    }
 }

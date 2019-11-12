@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
+﻿using System.Collections.Generic;
+using SampleMapper.Configurators;
 
 namespace SampleMapper
 {
-    // TODO: make generic
     public abstract class ProfilesBuilder<TSource, TReceiver>
     {
-        private readonly HashSet<ProfileMap> _profileMaps = new HashSet<ProfileMap>();
+        private readonly List<IProfileMapBuilder<TSource, TReceiver>> _profileMapConfigurators
+            = new List<IProfileMapBuilder<TSource, TReceiver>>();
 
-        protected IProfileConfigurator<TSource, TReceiver> CreateProfile()
+        protected IProfileMapBuilder<TSource, TReceiver> CreateProfile()
         {
-            var typeMap
+            var profileConfigurator = new ProfileMapBuilder<TSource, TReceiver>();
+            _profileMapConfigurators.Add(profileConfigurator);
 
-            return null;
+            return profileConfigurator;
         }
     }
 }

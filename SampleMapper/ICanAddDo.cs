@@ -1,6 +1,6 @@
 ﻿namespace SampleMapper
 {
-    public interface ICanAddResolve<TSource, TReceiverMember>
+    public interface ICanAddDo<TSource, TReceiverMember>
     {
         void Do(ValueResolver<TSource, TReceiverMember> resolver);
     }

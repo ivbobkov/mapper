@@ -12,9 +12,8 @@ namespace TinyMapper.Tests.Tests
         [Test]
         public void RawView()
         {
-            var mapping_M04_G_01 = new ProfileMap
+            var mapping_M04_G_01 = new ProfileMap(TypePair.Create<FakeCatalog, FakeToolDto>())
             {
-                TypePair = TypePair.Create<FakeCatalog, FakeToolDto>(),
                 Condition = Has.Class(ToolClasses.M04) && Has.Group(ToolGroups.G_01),
                 PropertyMaps =
                 {
@@ -23,11 +22,9 @@ namespace TinyMapper.Tests.Tests
                         ReceiverMember = Expression.Parameter(typeof(double?), "PointDiameter"),
                         MemberMaps =
                         {
-                            new MemberMap
-                            {
-                                Condition = new BlankCondition(),
-                                ValueResolver = Resolve.Constant(0d)
-                            }
+                            new MemberMap(
+                                new BlankCondition<FakeCatalog>(),
+                                Resolve.Constant(0d))
                         }
                     },
                     new PropertyMap
@@ -35,11 +32,9 @@ namespace TinyMapper.Tests.Tests
                         ReceiverMember = Expression.Parameter(typeof(double?), "PointAngle"),
                         MemberMaps =
                         {
-                            new MemberMap
-                            {
-                                Condition = new BlankCondition(),
-                                ValueResolver = Resolve.PointFromSettingAngle("A KAPPA")
-                            }
+                            new MemberMap(
+                                new BlankCondition<FakeCatalog>(),
+                                Resolve.PointFromSettingAngle("A KAPPA"))
                         }
                     },
                     new PropertyMap
@@ -47,27 +42,21 @@ namespace TinyMapper.Tests.Tests
                         ReceiverMember = Expression.Parameter(typeof(double?), "CornerRadius"),
                         MemberMaps =
                         {
-                            new MemberMap
-                            {
-                                Condition = Has.Parameter("R CORNER"),
-                                ValueResolver = Resolve.DoubleFromParameter("R CORNER")
-                            },
-                            new MemberMap
-                            {
-                                Condition = new BlankCondition(),
-                                ValueResolver = Resolve.Constant(0d)
-                            }
+                            new MemberMap(
+                                Has.Parameter("R CORNER"),
+                                Resolve.DoubleFromParameter("R CORNER")),
+                            new MemberMap(new BlankCondition<FakeCatalog>(), Resolve.Constant(0d))
                         }
                     }
                 }
             };
         }
 
-        public class FaceMillProfilesBuilder : ProfilesBuilder
+        public class FaceMillProfilesBuilder : ProfilesBuilder<FakeCatalog, FakeToolDto>
         {
             public FaceMillProfilesBuilder()
             {
-                CreateProfile<FakeCatalog, FakeToolDto>()
+                CreateProfile()
                     .Condition(Has.Class(ToolClasses.M04) && Has.Group(ToolGroups.G_01))
                     .Include( /* TO BE DONE */)
                     .For(x => x.PointDiameter, x => x.Do(Resolve.Constant(new double?(0))))
@@ -78,7 +67,7 @@ namespace TinyMapper.Tests.Tests
                         x.Do(Resolve.Constant(new double?(0)));
                     });
 
-                CreateProfile<FakeCatalog, FakeToolDto>()
+                CreateProfile()
                     .Condition(Has.Class(ToolClasses.M04) && Has.Group(ToolGroups.G_04))
                     .Include( /* TO BE DONE */)
                     .For(x => x.PointDiameter, x =>

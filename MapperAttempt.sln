@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyMapper.Tests", "MapperAttempt\TinyMapper.Tests.csproj", "{51FA02C6-AAFE-4027-A841-4F08F1DDEC70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyMapper", "Mapper\TinyMapper.csproj", "{AFF98B28-7B69-41EF-9E70-A8AEE99A753F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deprecated", "Mapper\Deprecated.csproj", "{AFF98B28-7B69-41EF-9E70-A8AEE99A753F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleMapper", "SampleMapper\SampleMapper.csproj", "{DD9A60DE-923C-4838-9566-C2D9E5FBA275}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleMapper", "SampleMapper\SampleMapper.csproj", "{DD9A60DE-923C-4838-9566-C2D9E5FBA275}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

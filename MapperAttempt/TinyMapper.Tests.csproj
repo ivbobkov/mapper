@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mapper\TinyMapper.csproj" />
+    <ProjectReference Include="..\Mapper\Deprecated.csproj" />
     <ProjectReference Include="..\SampleMapper\SampleMapper.csproj" />
   </ItemGroup>
 

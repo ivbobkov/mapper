@@ -2,7 +2,13 @@
 {
     public class MemberMap
     {
-        public ICondition Condition { get; set; }
-        public IValueResolver ValueResolver { get; set; }
+        public MemberMap(ICondition condition, IValueResolver valueResolver)
+        {
+            Condition = condition;
+            ValueResolver = valueResolver;
+        }
+
+        public ICondition Condition { get; }
+        public IValueResolver ValueResolver { get; }
     }
 }
