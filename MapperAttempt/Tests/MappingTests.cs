@@ -18,7 +18,7 @@ namespace TinyMapper.Tests.Tests
             //    {
             //        new MemberMap
             //        {
-            //            ReceiverMember = Expression.Parameter(typeof(double?), "PointDiameter"),
+            //            ReceiverProperty = Expression.Parameter(typeof(double?), "PointDiameter"),
             //            MemberValueResolvers =
             //            {
             //                new MemberValueResolver(
@@ -28,7 +28,7 @@ namespace TinyMapper.Tests.Tests
             //        },
             //        new MemberMap
             //        {
-            //            ReceiverMember = Expression.Parameter(typeof(double?), "PointAngle"),
+            //            ReceiverProperty = Expression.Parameter(typeof(double?), "PointAngle"),
             //            MemberValueResolvers =
             //            {
             //                new MemberValueResolver(
@@ -38,7 +38,7 @@ namespace TinyMapper.Tests.Tests
             //        },
             //        new MemberMap
             //        {
-            //            ReceiverMember = Expression.Parameter(typeof(double?), "CornerRadius"),
+            //            ReceiverProperty = Expression.Parameter(typeof(double?), "CornerRadius"),
             //            MemberValueResolvers =
             //            {
             //                new MemberValueResolver(

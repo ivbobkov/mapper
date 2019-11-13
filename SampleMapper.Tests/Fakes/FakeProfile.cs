@@ -2,9 +2,9 @@
 
 namespace SampleMapper.Tests.Fakes
 {
-    public class FakeDynamicProfile : ProfileBase
+    public class FakeProfile : ProfileBase
     {
-        public FakeDynamicProfile()
+        public FakeProfile()
         {
         }
     }

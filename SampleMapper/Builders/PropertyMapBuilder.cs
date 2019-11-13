@@ -8,12 +8,12 @@ namespace SampleMapper.Builders
 {
     public class PropertyMapBuilder<TSource, TReceiver, TReceiverMember> : IPropertyMapBuilder<TSource, TReceiver, TReceiverMember>
     {
-        private MemberInfo _receiverMember;
+        private PropertyInfo _receiverProperty;
         private IEnumerable<MappingAction> _mappingActions;
 
         public PropertyMap Build()
         {
-            if (_receiverMember == null)
+            if (_receiverProperty == null)
             {
                 throw new InvalidOperationException("You must configure receiver member before build");
             }
@@ -23,7 +23,7 @@ namespace SampleMapper.Builders
                 throw new InvalidOperationException("You must configure mapping actions before build");
             }
 
-            return new PropertyMap(_receiverMember, _mappingActions);
+            return new PropertyMap(_receiverProperty, _mappingActions);
         }
 
         public IPropertyMapBuilder<TSource, TReceiver, TReceiverMember> AddMember(Expression<Func<TReceiver, TReceiverMember>> receiverMember)
@@ -33,7 +33,7 @@ namespace SampleMapper.Builders
                 throw new ArgumentNullException(nameof(receiverMember));
             }
 
-            _receiverMember = ReflectionHelper.FindProperty(receiverMember);
+            _receiverProperty = ReflectionHelper.FindProperty(receiverMember);
 
             return this;
         }

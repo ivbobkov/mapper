@@ -28,7 +28,7 @@ namespace SampleMapper.Builders
             // TODO:
             // 1) Assert if last element is not BlankCondition
             // 2) Assert if there is condition duplicates
-            throw new NotImplementedException();
+            return _mappingActions;
         }
 
         void ICanAddDo<TSource, TReceiverMember>.Do(ValueResolver<TSource, TReceiverMember> resolver)

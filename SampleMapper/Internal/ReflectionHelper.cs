@@ -6,7 +6,7 @@ namespace SampleMapper.Internal
 {
     public static class ReflectionHelper
     {
-        public static MemberInfo FindProperty(LambdaExpression lambdaExpression)
+        public static PropertyInfo FindProperty(LambdaExpression lambdaExpression)
         {
             Expression expressionToCheck = lambdaExpression;
 
@@ -23,7 +23,7 @@ namespace SampleMapper.Internal
                         expressionToCheck = ((LambdaExpression)expressionToCheck).Body;
                         break;
                     case ExpressionType.MemberAccess:
-                        var memberExpression = ((MemberExpression)expressionToCheck);
+                        var memberExpression = (MemberExpression)expressionToCheck;
 
                         if (memberExpression.Expression.NodeType != ExpressionType.Parameter &&
                             memberExpression.Expression.NodeType != ExpressionType.Convert)
@@ -33,7 +33,7 @@ namespace SampleMapper.Internal
                                 nameof(lambdaExpression));
                         }
 
-                        var member = memberExpression.Member;
+                        var member = (PropertyInfo)memberExpression.Member;
 
                         return member;
                     default:

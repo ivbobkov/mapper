@@ -5,13 +5,13 @@ namespace SampleMapper
 {
     public class PropertyMap
     {
-        public PropertyMap(MemberInfo receiverMember, IEnumerable<MappingAction> mappingActions)
+        public PropertyMap(PropertyInfo receiverProperty, IEnumerable<MappingAction> mappingActions)
         {
-            ReceiverMember = receiverMember;
+            ReceiverProperty = receiverProperty;
             MappingActions = mappingActions;
         }
 
-        public MemberInfo ReceiverMember { get; }
+        public PropertyInfo ReceiverProperty { get; }
         public IEnumerable<MappingAction> MappingActions { get; }
     }
 }
