@@ -5,7 +5,15 @@ namespace SampleMapper
 {
     public abstract class ValueResolver<TSource, TReceiverMember> : IValueResolver
     {
-        public abstract Expression<Func<TSource, TReceiverMember>> ToExpression();
-        LambdaExpression IValueResolver.ToLambda() => ToExpression();
+        protected ValueResolver()
+        {
+            ResolverExpression = CreateResolver();
+        }
+
+        protected Expression<Func<TSource, TReceiverMember>> ResolverExpression { get; }
+
+        public LambdaExpression AsLambda() => ResolverExpression;
+
+        protected abstract Expression<Func<TSource, TReceiverMember>> CreateResolver();
     }
 }

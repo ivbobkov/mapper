@@ -4,6 +4,6 @@ namespace SampleMapper
 {
     public interface IValueResolver
     {
-        LambdaExpression ToLambda();
+        LambdaExpression AsLambda();
     }
 }

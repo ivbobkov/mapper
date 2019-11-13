@@ -2,7 +2,7 @@
 
 namespace SampleMapper
 {
-    public struct TypePair 
+    public struct TypePair : IEquatable<TypePair>
     {
         public TypePair(Type sourceType, Type receiverType)
         {
@@ -19,6 +19,23 @@ namespace SampleMapper
             return new TypePair(typeof(TSource), typeof(TReceiver));
         }
 
-        // TODO: use IEquatable<TypePair> here
+        public bool Equals(TypePair other)
+        {
+            return SourceType == other.SourceType && ReceiverType == other.ReceiverType;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is TypePair other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            const int deviation = 5; // any random number
+            var h1 = SourceType.GetHashCode();
+            var h2 = ReceiverType.GetHashCode();
+
+            return ((h1 << deviation) + h1) ^ h2;
+        }
     }
 }
