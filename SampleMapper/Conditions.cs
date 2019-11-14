@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace SampleMapper
 {
-    public interface ICondition
+    public interface ICondition : IEquatable<ICondition>
     {
         LambdaExpression AsLambda();
         int GetHashCode();
@@ -17,21 +17,21 @@ namespace SampleMapper
 
         public LambdaExpression AsLambda()
         {
-            SetConditionState();
+            ActualizeState();
 
             return _conditionExpression;
         }
 
         public bool IsMatch(TSource source)
         {
-            SetConditionState();
+            ActualizeState();
 
             return _conditionFunc(source);
         }
 
         protected abstract Expression<Func<TSource, bool>> CreateCondition();
 
-        private void SetConditionState()
+        private void ActualizeState()
         {
             if (_conditionExpression == null)
             {
@@ -55,19 +55,39 @@ namespace SampleMapper
             return new NotCondition<TSource>(condition);
         }
 
-        public abstract override int GetHashCode();
-
-        public override bool Equals(object obj)
+        public bool Equals(ICondition other)
         {
-            var inputCondition = obj as ICondition;
-
-            if (inputCondition == null)
+            if (other == null)
             {
                 return false;
             }
 
-            return GetHashCode() == inputCondition.GetHashCode();
+            return GetHashCode() == other.GetHashCode();
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            var condition = obj as ICondition;
+
+            if (condition == null)
+            {
+                return false;
+            }
+
+            return Equals(condition);
+        }
+
+        public abstract override int GetHashCode();
     }
 
     public class AndCondition<TSource> : Condition<TSource>
@@ -158,24 +178,6 @@ namespace SampleMapper
         public override int GetHashCode()
         {
             return GetType().GetHashCode();
-        }
-    }
-
-    public static class ConditionExtensions
-    {
-        public static Condition<TSource> And<TSource>(this Condition<TSource> source, Condition<TSource> condition)
-        {
-            return new AndCondition<TSource>(source, condition);
-        }
-
-        public static Condition<TSource> Or<TSource>(this Condition<TSource> source, Condition<TSource> condition)
-        {
-            return new OrCondition<TSource>(source, condition);
-        }
-
-        public static Condition<TSource> Not<TSource>(this Condition<TSource> source)
-        {
-            return new NotCondition<TSource>(source);
         }
     }
 }

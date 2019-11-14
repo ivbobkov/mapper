@@ -1,4 +1,5 @@
 ﻿using System;
+using SampleMapper.Helpers;
 
 namespace SampleMapper
 {
@@ -31,11 +32,7 @@ namespace SampleMapper
 
         public override int GetHashCode()
         {
-            const int deviation = 5; // any random number
-            var hash1 = SourceType.GetHashCode();
-            var hash2 = ReceiverType.GetHashCode();
-
-            return ((hash1 << deviation) + hash1) ^ hash2;
+            return HashCodeHelper.ResolveHashForType(SourceType.GetHashCode(), ReceiverType);
         }
     }
 }

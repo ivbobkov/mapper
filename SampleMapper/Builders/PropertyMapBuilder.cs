@@ -33,7 +33,7 @@ namespace SampleMapper.Builders
                 throw new ArgumentNullException(nameof(receiverMember));
             }
 
-            _receiverProperty = ReflectionHelper.FindProperty(receiverMember);
+            _receiverProperty = PropertyInfoResolver.FromLambda(receiverMember);
 
             return this;
         }

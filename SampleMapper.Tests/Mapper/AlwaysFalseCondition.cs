@@ -12,7 +12,7 @@ namespace SampleMapper.Tests.Mapper
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            return GetType().GetHashCode();
         }
     }
 }

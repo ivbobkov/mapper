@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace SampleMapper.Internal
 {
-    public static class ReflectionHelper
+    internal static class PropertyInfoResolver
     {
-        public static PropertyInfo FindProperty(LambdaExpression lambdaExpression)
+        public static PropertyInfo FromLambda(LambdaExpression lambdaExpression)
         {
             Expression expressionToCheck = lambdaExpression;
 

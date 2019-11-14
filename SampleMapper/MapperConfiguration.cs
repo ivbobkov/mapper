@@ -8,13 +8,14 @@ namespace SampleMapper
 {
     public class MapperConfiguration : IMapperConfiguration
     {
-        private readonly List<ProfileMap> _profileMaps = new List<ProfileMap>();
+        private readonly HashSet<ProfileMap> _profileMaps = new HashSet<ProfileMap>();
 
         public void LoadProfile(ProfileBase profile)
         {
             // TODO: 1) check for typepair and condition duplicates
             var profileMaps = profile.BuildProfileMaps();
-            _profileMaps.AddRange(profileMaps);
+
+            _profileMaps.UnionWith(profileMaps);
         }
 
         public ProfileMap GetProfileMap<TSource, TReceiver>(TSource source)
@@ -56,7 +57,7 @@ namespace SampleMapper
             throw new InvalidOperationException("No fallback profile");
         }
 
-        // TODO: rework, cache it
+        // TODO: cache it
         public Func<TSource, TReceiver> GetMapperFunc<TSource, TReceiver>(TSource source)
         {
             var profileMap = GetProfileMap<TSource, TReceiver>(source);
@@ -70,7 +71,7 @@ namespace SampleMapper
                 Expression.Assign(receiverInstance, GetCreatorExpression<TReceiver>())
             };
 
-            // TODO: determinate in expression
+            // TODO: check in expression
             foreach (var propertyMap in profileMap.PropertyMaps)
             {
                 foreach (var mappingAction in propertyMap.MappingActions)

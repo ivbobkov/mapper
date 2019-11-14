@@ -3,6 +3,11 @@ using System.Linq.Expressions;
 
 namespace SampleMapper
 {
+    public interface IValueResolver
+    {
+        LambdaExpression AsLambda();
+    }
+
     public abstract class ValueResolver<TSource, TReceiverMember> : IValueResolver
     {
         private Expression<Func<TSource, TReceiverMember>> _resolverExpression;
