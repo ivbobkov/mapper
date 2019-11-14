@@ -32,10 +32,10 @@ namespace SampleMapper
         public override int GetHashCode()
         {
             const int deviation = 5; // any random number
-            var h1 = SourceType.GetHashCode();
-            var h2 = ReceiverType.GetHashCode();
+            var hash1 = SourceType.GetHashCode();
+            var hash2 = ReceiverType.GetHashCode();
 
-            return ((h1 << deviation) + h1) ^ h2;
+            return ((hash1 << deviation) + hash1) ^ hash2;
         }
     }
 }

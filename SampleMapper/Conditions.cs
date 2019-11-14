@@ -7,6 +7,7 @@ namespace SampleMapper
     public interface ICondition
     {
         LambdaExpression AsLambda();
+        int GetHashCode();
     }
 
     public abstract class Condition<TSource> : ICondition
@@ -54,14 +55,18 @@ namespace SampleMapper
             return new NotCondition<TSource>(condition);
         }
 
-        public static bool operator true(Condition<TSource> condition)
-        {
-            return true;
-        }
+        public abstract override int GetHashCode();
 
-        public static bool operator false(Condition<TSource> condition)
+        public override bool Equals(object obj)
         {
-            return false;
+            var inputCondition = obj as ICondition;
+
+            if (inputCondition == null)
+            {
+                return false;
+            }
+
+            return GetHashCode() == inputCondition.GetHashCode();
         }
     }
 
@@ -85,6 +90,11 @@ namespace SampleMapper
 
             return Expression.Lambda<Func<TSource, bool>>(andExpression, leftExpression.Parameters.Single());
         }
+
+        public override int GetHashCode()
+        {
+            return _left.GetHashCode() & _right.GetHashCode();
+        }
     }
 
     public class OrCondition<TSource> : Condition<TSource>
@@ -107,6 +117,11 @@ namespace SampleMapper
 
             return Expression.Lambda<Func<TSource, bool>>(orExpression, leftExpression.Parameters.Single());
         }
+
+        public override int GetHashCode()
+        {
+            return _left.GetHashCode() | _right.GetHashCode();
+        }
     }
 
     public class NotCondition<TSource> : Condition<TSource>
@@ -126,6 +141,11 @@ namespace SampleMapper
 
             return Expression.Lambda<Func<TSource, bool>>(body, parameter);
         }
+
+        public override int GetHashCode()
+        {
+            return ~_condition.GetHashCode();
+        }
     }
 
     public class BlankCondition<TSource> : Condition<TSource>
@@ -133,6 +153,11 @@ namespace SampleMapper
         protected override Expression<Func<TSource, bool>> CreateCondition()
         {
             return _ => true;
+        }
+
+        public override int GetHashCode()
+        {
+            return GetType().GetHashCode();
         }
     }
 

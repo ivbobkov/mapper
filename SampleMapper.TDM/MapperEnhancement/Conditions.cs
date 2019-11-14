@@ -22,6 +22,11 @@ namespace SampleMapper.TDM.MapperEnhancement
                 catalog.CatalogValues.Any(c => c.Code.Equals(ParameterName))
                 && catalog.CatalogValues.Single(c => c.Code.Equals(ParameterName)).ValNum.Equals(ParameterValue);
         }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class HasParameterCondition : Condition<CatalogItem>
@@ -36,6 +41,11 @@ namespace SampleMapper.TDM.MapperEnhancement
         protected override Expression<Func<CatalogItem, bool>> CreateCondition()
         {
             return catalog => catalog.HasParameter(ParameterName);
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -52,6 +62,11 @@ namespace SampleMapper.TDM.MapperEnhancement
         {
             return catalog => ParameterNames.All(x => catalog.CatalogValues.Any(c => c.Code.Equals(x)));
         }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class HasClassCondition : Condition<CatalogItem>
@@ -67,6 +82,11 @@ namespace SampleMapper.TDM.MapperEnhancement
         {
             return catalog => catalog.ToolClassId.Equals(ClassName);
         }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class HasGroupCondition : Condition<CatalogItem>
@@ -81,6 +101,11 @@ namespace SampleMapper.TDM.MapperEnhancement
         protected override Expression<Func<CatalogItem, bool>> CreateCondition()
         {
             return catalog => catalog.ToolGroupId.Equals(GroupName);
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

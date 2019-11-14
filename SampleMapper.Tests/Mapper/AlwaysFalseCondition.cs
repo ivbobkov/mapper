@@ -9,5 +9,10 @@ namespace SampleMapper.Tests.Mapper
         {
             return _ => false;
         }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
