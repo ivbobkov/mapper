@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace SampleMapper.Builders
@@ -8,7 +9,7 @@ namespace SampleMapper.Builders
     {
         private Condition<TSource> _executionClause;
         private bool _isDefault;
-        private readonly List<PropertyMap> _propertyMaps = new List<PropertyMap>();
+        private readonly HashSet<PropertyMap> _propertyMaps = new HashSet<PropertyMap>();
 
         public IProfileMapBuilder<TSource, TReceiver> UseExecutionClause(Condition<TSource> executionClause)
         {
@@ -50,8 +51,13 @@ namespace SampleMapper.Builders
                 .AddSetupAction(setupAction)
                 .Build();
 
-            // TODO: 1) check for duplicate
-            // TODO: 2) replace duplicate new PropertyMap
+            var propertyInfo = propertyMap.ReceiverProperty;
+            var entry = _propertyMaps.SingleOrDefault(x => x.ReceiverProperty.Equals(propertyInfo));
+
+            if (entry != null)
+            {
+                _propertyMaps.Remove(entry);
+            }
 
             _propertyMaps.Add(propertyMap);
 

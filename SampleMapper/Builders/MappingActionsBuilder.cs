@@ -8,16 +8,32 @@ namespace SampleMapper.Builders
         ICanAddDo<TSource, TReceiverMember>
     {
         private Condition<TSource> _currentExecutionClause;
-        private readonly List<MappingAction> _mappingActions = new List<MappingAction>();
+        private readonly HashSet<MappingAction> _mappingActions = new HashSet<MappingAction>();
 
         void IMappingActionsBuilder<TSource, TReceiverMember>.Do(ValueResolver<TSource, TReceiverMember> resolver)
         {
+            if (_currentExecutionClause == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             var mappingAction = new MappingAction(new BlankCondition<TSource>(), resolver);
+
+            if (_mappingActions.Contains(mappingAction))
+            {
+                throw new InvalidOperationException();
+            }
+
             _mappingActions.Add(mappingAction);
         }
 
         ICanAddDo<TSource, TReceiverMember> IMappingActionsBuilder<TSource, TReceiverMember>.If(Condition<TSource> executionClause)
         {
+            if (_currentExecutionClause != null)
+            {
+                throw new InvalidOperationException();
+            }
+
             _currentExecutionClause = executionClause;
 
             return this;
@@ -25,9 +41,6 @@ namespace SampleMapper.Builders
 
         public IEnumerable<MappingAction> Build()
         {
-            // TODO:
-            // 1) Assert if last element is not BlankCondition
-            // 2) Assert if there is condition duplicates
             return _mappingActions;
         }
 
@@ -39,7 +52,14 @@ namespace SampleMapper.Builders
             }
 
             var mappingAction = new MappingAction(_currentExecutionClause, resolver);
+
+            if (_mappingActions.Contains(mappingAction))
+            {
+                throw new InvalidOperationException();
+            }
+
             _mappingActions.Add(mappingAction);
+            _currentExecutionClause = null;
         }
     }
 }

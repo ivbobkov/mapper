@@ -5,7 +5,7 @@ using SampleMapper.Helpers;
 
 namespace SampleMapper
 {
-    public struct PropertyMap : IEquatable<PropertyMap>
+    public class PropertyMap : IEquatable<PropertyMap>
     {
         public PropertyMap(PropertyInfo receiverProperty, IEnumerable<MappingAction> mappingActions)
         {
@@ -18,11 +18,31 @@ namespace SampleMapper
 
         public bool Equals(PropertyMap other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return ReceiverProperty.Equals(other.ReceiverProperty);
         }
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
             return obj is PropertyMap other && Equals(other);
         }
 

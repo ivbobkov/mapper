@@ -4,7 +4,7 @@ using SampleMapper.Helpers;
 
 namespace SampleMapper
 {
-    public struct ProfileMap : IEquatable<ProfileMap>
+    public class ProfileMap : IEquatable<ProfileMap>
     {
         public ProfileMap(
             TypePair typePair,
@@ -25,15 +25,34 @@ namespace SampleMapper
 
         public bool Equals(ProfileMap other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return
                 TypePair.Equals(other.TypePair)
-                && Equals(Condition, other.Condition)
-                && IsDefault == other.IsDefault
-                && Equals(PropertyMaps, other.PropertyMaps);
+                && Condition.Equals(other.Condition)
+                && IsDefault == other.IsDefault;
         }
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
             return obj is ProfileMap other && Equals(other);
         }
 

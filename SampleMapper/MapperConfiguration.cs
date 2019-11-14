@@ -12,10 +12,17 @@ namespace SampleMapper
 
         public void LoadProfile(ProfileBase profile)
         {
-            // TODO: 1) check for typepair and condition duplicates
             var profileMaps = profile.BuildProfileMaps();
 
-            _profileMaps.UnionWith(profileMaps);
+            foreach (var profileToAdd in profileMaps)
+            {
+                if (_profileMaps.Contains(profileToAdd))
+                {
+                    throw new InvalidOperationException("There is already");
+                }
+
+                _profileMaps.Add(profileToAdd);
+            }
         }
 
         public ProfileMap GetProfileMap<TSource, TReceiver>(TSource source)

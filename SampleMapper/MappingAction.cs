@@ -3,7 +3,7 @@ using SampleMapper.Helpers;
 
 namespace SampleMapper
 {
-    public struct MappingAction : IEquatable<MappingAction>
+    public class MappingAction : IEquatable<MappingAction>
     {
         public MappingAction(ICondition executionClause, IValueResolver valueResolver)
         {
@@ -16,11 +16,31 @@ namespace SampleMapper
 
         public bool Equals(MappingAction other)
         {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return ExecutionClause.Equals(other.ExecutionClause);
         }
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
             return obj is MappingAction other && Equals(other);
         }
 
