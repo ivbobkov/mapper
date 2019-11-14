@@ -1,4 +1,4 @@
-﻿namespace SampleMapper.Tests.Fakes
+﻿namespace SampleMapper.Tests.Mapper.Fakes
 {
     public class FakeReceiver
     {

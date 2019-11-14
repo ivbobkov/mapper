@@ -1,13 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
-using SampleMapper.Tests.Fakes;
+using SampleMapper.Tests.Mapper.Fakes;
 
-namespace SampleMapper.Tests
+namespace SampleMapper.Tests.Mapper
 {
     [TestFixture]
     public class MapperTests
     {
         private IMapper _mapper;
+        private IMapperConfiguration _mapperConfiguration;
 
         [SetUp]
         public void SetUp()
@@ -28,13 +29,13 @@ namespace SampleMapper.Tests
             profile.CreateProfile<FakeSource, FakeReceiver>()
                 .UseExecutionClause(new AlwaysFalseCondition<FakeSource>());
 
-            _mapper.LoadProfile(profile);
+            _mapperConfiguration.LoadProfile(profile);
 
-            Assert.Throws<InvalidOperationException>(() => _mapper.Map<FakeSource, FakeReceiver>(new FakeSource()));
+            Assert.Throws<InvalidOperationException>(() => _mapper.Map<FakeSource, FakeReceiver>(CreateSource()));
         }
 
         [Test]
-        public void Mapper_ConfiguredType_VerifyMapping()
+        public void Mapper_DirectMappingIsConfigured_VerifyMapping()
         {
             var profile = new FakeProfile();
             profile.CreateProfile<FakeSource, FakeReceiver>()
@@ -42,12 +43,8 @@ namespace SampleMapper.Tests
                 .For(x => x.StringValue, x => x.Do(new ExpressionResolver<FakeSource, string>(c => c.StringValue)))
                 .For(x => x.IntValue, x => x.Do(new ExpressionResolver<FakeSource, int>(c => c.IntValue)));
 
-            _mapper.LoadProfile(profile);
-            var source = new FakeSource
-            {
-                StringValue = "Source value",
-                IntValue = 10
-            };
+            _mapperConfiguration.LoadProfile(profile);
+            var source = CreateSource();
 
             var receiver = _mapper.Map<FakeSource, FakeReceiver>(source);
 
@@ -55,9 +52,20 @@ namespace SampleMapper.Tests
             Assert.AreEqual(source.IntValue, receiver.IntValue);
         }
 
+        private FakeSource CreateSource(string stringValue = "FakeValue", int intValue = 25)
+        {
+            return new FakeSource
+            {
+                StringValue = stringValue,
+                IntValue = intValue
+            };
+        }
+
         private IMapper CreateSubject()
         {
-            return new Mapper();
+            _mapperConfiguration = new MapperConfiguration();
+
+            return new SampleMapper.Mapper(_mapperConfiguration);
         }
     }
 }

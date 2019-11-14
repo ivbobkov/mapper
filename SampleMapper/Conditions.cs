@@ -11,23 +11,33 @@ namespace SampleMapper
 
     public abstract class Condition<TSource> : ICondition
     {
-        protected Condition()
+        private Expression<Func<TSource, bool>> _conditionExpression;
+        private Func<TSource, bool> _conditionFunc;
+
+        public LambdaExpression AsLambda()
         {
-            ConditionExpression = CreateCondition();
-            CompiledConditionExpression = ConditionExpression.Compile();
+            SetConditionState();
+
+            return _conditionExpression;
         }
-
-        protected Expression<Func<TSource, bool>> ConditionExpression { get; }
-        protected Func<TSource, bool> CompiledConditionExpression { get; }
-
-        public LambdaExpression AsLambda() => ConditionExpression;
 
         public bool IsMatch(TSource source)
         {
-            return CompiledConditionExpression(source);
+            SetConditionState();
+
+            return _conditionFunc(source);
         }
 
         protected abstract Expression<Func<TSource, bool>> CreateCondition();
+
+        private void SetConditionState()
+        {
+            if (_conditionExpression == null)
+            {
+                _conditionExpression = CreateCondition();
+                _conditionFunc = _conditionExpression.Compile();
+            }
+        }
 
         public static Condition<TSource> operator &(Condition<TSource> left, Condition<TSource> right)
         {

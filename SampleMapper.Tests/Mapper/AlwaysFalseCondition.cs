@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace SampleMapper.Tests
+namespace SampleMapper.Tests.Mapper
 {
     public class AlwaysFalseCondition<TSource> : Condition<TSource>
     {

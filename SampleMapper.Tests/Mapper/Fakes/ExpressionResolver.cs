@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace SampleMapper.Tests.Fakes
+namespace SampleMapper.Tests.Mapper.Fakes
 {
     public class ExpressionResolver<TSource, TReceiverMember> : ValueResolver<TSource, TReceiverMember>
     {
