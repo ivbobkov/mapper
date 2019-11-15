@@ -4,7 +4,7 @@
     {
         public static Condition<CatalogItem> Parameter(string parameterName)
         {
-            return new NotCondition<CatalogItem>(new HasParameterCondition(parameterName));
+            return !new HasParameterCondition(parameterName);
         }
     }
 }

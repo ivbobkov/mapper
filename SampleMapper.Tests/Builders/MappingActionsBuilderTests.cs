@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using NUnit.Framework;
 using SampleMapper.Builders;
 using SampleMapper.Tests.Fakes;
@@ -19,49 +18,55 @@ namespace SampleMapper.Tests.Builders
         }
 
         [Test]
-        public void Do_ResolverIsNull_ThrowsArgumentNullException()
+        public void Do_ResolverIsNull_Throws()
         {
             Assert.Throws<ArgumentNullException>(() => _subject.Do(null));
         }
 
         [Test]
-        public void Do_AlreadyAdded_ThrowsInvalidOperationException()
+        public void Do_AlreadyAdded_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
-                _subject.Do(Resolve(c => c.StringValue));
-                _subject.Do(Resolve(c => ""));
-            }, "There is execution clause duplicate");
+                _subject.Do(NoAction());
+                _subject.Do(NoAction());
+            });
+
+            Assert.AreEqual("There is execution clause duplicate", exception.Message);
         }
 
         [Test]
-        public void If_ConditionIsNull_ThrowsArgumentNullException()
+        public void If_ConditionIsNull_Throws()
         {
-            Assert.Throws<ArgumentNullException>(() => _subject.If(null), "");
+            Assert.Throws<ArgumentNullException>(() => _subject.If(null));
         }
 
         [Test]
-        public void If_PreviousConditionIsNotConfigured_ThrowsInvalidOperationException()
+        public void If_PreviousConditionIsNotConfigured_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
                 _subject.If(HasCode("DC"));
-                _subject.If(HasCode("DC2")).ThenDo(Resolve(x => "OK"));
-            }, "Last mapping action is not configured");
+                _subject.If(HasCode("DC2")).ThenDo(NoAction());
+            });
+
+            Assert.AreEqual("Last mapping action is not configured", exception.Message);
         }
 
         [Test]
-        public void If_DuplicatedConditionIsAdded_ThrowsInvalidOperationException()
+        public void If_DuplicatedConditionIsAdded_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
-                _subject.If(HasCode("DC")).ThenDo(Resolve(x => "OK"));
-                _subject.If(HasCode("DC")).ThenDo(Resolve(x => "Exception"));
-            }, "There is execution clause duplicate");
+                _subject.If(HasCode("DC")).ThenDo(NoAction());
+                _subject.If(HasCode("DC")).ThenDo(NoAction());
+            });
+
+            Assert.AreEqual("There is execution clause duplicate", exception.Message);
         }
 
         [Test]
-        public void IfThenDo_ResolverIsNull_ThrowsArgumentNullException()
+        public void IfThenDo_ResolverIsNull_Throws()
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -70,58 +75,66 @@ namespace SampleMapper.Tests.Builders
         }
 
         [Test]
-        public void ThenDo_NoActionsWereConfigured_ThrowsInvalidOperationException()
+        public void ThenDo_NoActionsWereConfigured_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
                 var casted = (ICanAddThenDo<FakeSource, string>) _subject;
-                casted.ThenDo(Resolve(x => "OK"));
-            }, "No mapping actions were configured");
+                casted.ThenDo(NoAction());
+            });
+
+            Assert.AreEqual("No mapping actions were configured", exception.Message);
         }
 
         [Test]
-        public void IfThenDo_IfIsNotConfigured_ThrowsInvalidOperationException()
+        public void IfThenDo_IfIsNotConfigured_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
-                _subject.If(HasCode("DC")).ThenDo(Resolve(x => "OK"));
+                _subject.If(HasCode("DC")).ThenDo(NoAction());
                 var casted = (ICanAddThenDo<FakeSource, string>) _subject;
-                casted.ThenDo(Resolve(x => "NEW"));
-            }, "Last mapping action was configured");
+                casted.ThenDo(NoAction());
+            });
+
+            Assert.AreEqual("Last mapping action was configured", exception.Message);
         }
 
         [Test]
-        public void Build_NoActionsConfigured_ThrowsInvalidOperationException()
+        public void Build_NoConfiguredActions_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
                 _subject.Build().ToArray();
-            }, "No mapping actions configured");
+            });
+
+            Assert.AreEqual("No mapping actions configured", exception.Message);
         }
 
         [Test]
-        public void Build_ConditionalActionsConfiguredNoDefaultActionConfigured_ThrowsInvalidOperationException()
+        public void Build_ConditionalActionsConfiguredButDefaultDidNot_Throws()
         {
-            Assert.Throws<InvalidOperationException>(() =>
+            var exception = Assert.Throws<InvalidOperationException>(() =>
             {
-                _subject.If(HasCode("DC")).ThenDo(Resolve(x => "OK"));
+                _subject.If(HasCode("DC")).ThenDo(NoAction());
                 _subject.Build().ToArray();
-            }, "Conditional actions configured, but default at the end is not");
+            });
+
+            Assert.AreEqual("Conditional actions configured, but default at the end is not", exception.Message);
         }
 
         [Test]
         public void Build_ActionsConfiguredWell_VerifyOrder()
         {
-            _subject.If(HasCode("Code")).ThenDo(Resolve(x => "DO"));
-            _subject.Do(Resolve(x => "Default"));
+            _subject.If(HasCode("Code")).ThenDo(NoAction());
+            _subject.Do(NoAction());
 
             var mappingActions = _subject.Build().ToList();
 
             Assert.IsAssignableFrom<HasCodeCondition>(mappingActions[0].ExecutionClause);
-            Assert.IsAssignableFrom<ExpressionResolver<FakeSource, string>>(mappingActions[0].ValueResolver);
+            Assert.IsAssignableFrom<BlankResolver<FakeSource, string>>(mappingActions[0].ValueResolver);
 
             Assert.IsAssignableFrom<BlankCondition<FakeSource>>(mappingActions[1].ExecutionClause);
-            Assert.IsAssignableFrom<ExpressionResolver<FakeSource, string>>(mappingActions[1].ValueResolver);
+            Assert.IsAssignableFrom<BlankResolver<FakeSource, string>>(mappingActions[1].ValueResolver);
         }
 
         private static Condition<FakeSource> HasCode(string code)
@@ -129,9 +142,9 @@ namespace SampleMapper.Tests.Builders
             return new HasCodeCondition(code);
         }
 
-        private static ValueResolver<FakeSource, TReceiverMember> Resolve<TReceiverMember>(Expression<Func<FakeSource, TReceiverMember>> resolver)
+        private static BlankResolver<FakeSource, string> NoAction()
         {
-            return new ExpressionResolver<FakeSource, TReceiverMember>(resolver);
+            return new BlankResolver<FakeSource, string>();
         }
     }
 }

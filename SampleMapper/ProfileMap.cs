@@ -1,67 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using SampleMapper.Helpers;
 
 namespace SampleMapper
 {
-    public class ProfileMap : IEquatable<ProfileMap>
+    public class ProfileMap
     {
         public ProfileMap(
             TypePair typePair,
-            ICondition condition,
+            ConstructorInfo receiverConstructorInfo,
+            ICondition executionClause,
             bool isDefault,
             IEnumerable<PropertyMap> propertyMaps)
         {
             TypePair = typePair;
-            Condition = condition;
+            ReceiverConstructorInfo = receiverConstructorInfo;
+            ExecutionClause = executionClause;
             IsDefault = isDefault;
             PropertyMaps = propertyMaps;
+
+            Identity = ComputeIdentity();
         }
 
+        public int Identity { get; }
         public TypePair TypePair { get; }
-        public ICondition Condition { get; }
+        public ConstructorInfo ReceiverConstructorInfo { get; }
+        public ICondition ExecutionClause { get; }
         public bool IsDefault { get; }
         public IEnumerable<PropertyMap> PropertyMaps { get; }
 
-        public bool Equals(ProfileMap other)
+        private int ComputeIdentity()
         {
-            if (other == null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return
-                TypePair.Equals(other.TypePair)
-                && Condition.Equals(other.Condition)
-                && IsDefault == other.IsDefault;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            return obj is ProfileMap other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            var stateHash =
-                TypePair.GetHashCode()
-                ^ Condition.GetHashCode()
-                ^ IsDefault.GetHashCode();
+            var stateHash = TypePair.GetHashCode()
+                            ^ ReceiverConstructorInfo.GetHashCode()
+                            ^ ExecutionClause.GetHashCode()
+                            ^ IsDefault.GetHashCode();
 
             return HashCodeHelper.ResolveHashForType(stateHash, GetType());
         }

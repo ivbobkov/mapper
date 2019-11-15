@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SampleMapper.Builders
 {
@@ -9,7 +10,7 @@ namespace SampleMapper.Builders
     {
         private Condition<TSource> _executionClause;
         private bool _isDefault;
-        private readonly HashSet<PropertyMap> _propertyMaps = new HashSet<PropertyMap>();
+        private readonly List<PropertyMap> _propertyMaps = new List<PropertyMap>();
 
         public IProfileMapBuilder<TSource, TReceiver> UseExecutionClause(Condition<TSource> executionClause)
         {
@@ -20,7 +21,7 @@ namespace SampleMapper.Builders
 
             if (_isDefault)
             {
-                throw new InvalidOperationException("Impossible to set execution clause to default profile.");
+                throw new InvalidOperationException("You could not use execution clause for default profile");
             }
 
             _executionClause = executionClause;
@@ -32,7 +33,7 @@ namespace SampleMapper.Builders
         {
             if (_executionClause != null)
             {
-                throw new InvalidOperationException("Impossible to set is default for profile that already has execution clause.");
+                throw new InvalidOperationException("Profile with execution clause could not be default");
             }
 
             _isDefault = true;
@@ -51,14 +52,7 @@ namespace SampleMapper.Builders
                 .AddSetupAction(setupAction)
                 .Build();
 
-            var propertyInfo = propertyMap.ReceiverProperty;
-            var entry = _propertyMaps.SingleOrDefault(x => x.ReceiverProperty.Equals(propertyInfo));
-
-            if (entry != null)
-            {
-                _propertyMaps.Remove(entry);
-            }
-
+            _propertyMaps.RemoveAll(x => x.ReceiverProperty.Equals(propertyMap.ReceiverProperty));
             _propertyMaps.Add(propertyMap);
 
             return this;
@@ -68,12 +62,34 @@ namespace SampleMapper.Builders
         {
             if (_executionClause == null)
             {
-                throw new InvalidOperationException("Execution clause must be set");
+                throw new InvalidOperationException("Execution clause must be set for non default profile");
+            }
+
+            if (!_propertyMaps.Any())
+            {
+                throw new InvalidOperationException("No property maps configured");
             }
 
             var typePair = TypePair.Create<TSource, TReceiver>();
 
-            return new ProfileMap(typePair, _executionClause, _isDefault, _propertyMaps);
+            return new ProfileMap(
+                typePair,
+                GetReceiverConstructorInfo(typePair.ReceiverType),
+                _executionClause,
+                _isDefault,
+                _propertyMaps);
+        }
+
+        private ConstructorInfo GetReceiverConstructorInfo(Type receiverType)
+        {
+            var receiverConstructor = receiverType.GetConstructor(Array.Empty<Type>());
+
+            if (receiverConstructor == null)
+            {
+                throw new ArgumentException($"Default constructor for {receiverType.Name} not found");
+            }
+
+            return receiverConstructor;
         }
     }
 }

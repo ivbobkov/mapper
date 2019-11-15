@@ -1,7 +1,4 @@
-﻿using System;
-using SampleMapper.Helpers;
-
-namespace SampleMapper
+﻿namespace SampleMapper
 {
     public class MappingAction
     {

@@ -23,10 +23,5 @@ namespace SampleMapper.Tests.Fakes
         {
             return HashCodeHelper.ResolveHashForType(Code.GetHashCode(), GetType());
         }
-
-        public static HasCodeCondition Create<TSource>(string code)
-        {
-            return new HasCodeCondition(code);
-        }
     }
 }

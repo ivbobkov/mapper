@@ -36,7 +36,7 @@ namespace SampleMapper
             }
 
             var profilesMatchedByCondition = profileMaps
-                .Where(c => ((Condition<TSource>)c.Condition).IsMatch(source) && !c.IsDefault)
+                .Where(c => ((Condition<TSource>)c.ExecutionClause).IsMatch(source) && !c.IsDefault)
                 .ToList();
 
             if (profilesMatchedByCondition.Count == 1)
@@ -75,7 +75,7 @@ namespace SampleMapper
 
             var expressions = new List<Expression>
             {
-                Expression.Assign(receiverInstance, GetCreatorExpression<TReceiver>())
+                Expression.Assign(receiverInstance, Expression.New(profileMap.ReceiverConstructorInfo))
             };
 
             // TODO: check in expression
@@ -96,22 +96,6 @@ namespace SampleMapper
 
             var body = Expression.Block(new[] { receiverInstance }, expressions);
             return Expression.Lambda<Func<TSource, TReceiver>>(body, parameter).Compile();
-        }
-
-        // TODO: to profile builder
-        private NewExpression GetCreatorExpression<TReceiver>()
-        {
-            var receiverType = typeof(TReceiver);
-            var receiverConstructor = receiverType.GetConstructor(Array.Empty<Type>());
-
-            if (receiverConstructor == null)
-            {
-                throw new Exception($"Default constructor for {receiverType.Name} not found");
-            }
-
-            var newExpression = Expression.New(receiverConstructor);
-
-            return newExpression;
         }
     }
 }
