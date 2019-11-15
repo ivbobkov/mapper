@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using System.Linq.Expressions;
 using NUnit.Framework;
 using SampleMapper.Tests.Fakes;
 
@@ -100,7 +99,7 @@ namespace SampleMapper.Tests
                 yield return new TestCaseData(
                     !HasCode("C1") | !HasCode("C2"),
                     CreateSource("C3")
-                ).Returns(false);
+                ).Returns(true);
             }
         }
 

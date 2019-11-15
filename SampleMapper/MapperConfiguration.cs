@@ -2,33 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using SampleMapper.Builders;
 
 namespace SampleMapper
 {
     public class MapperConfiguration : IMapperConfiguration
     {
-        private readonly HashSet<ProfileMap> _profileMaps = new HashSet<ProfileMap>();
+        private readonly IDictionary<int, ProfileMap> _profileMaps = new Dictionary<int, ProfileMap>();
 
         public void LoadProfile(MappingProfile mappingProfile)
         {
             var profileMaps = mappingProfile.BuildProfileMaps();
 
-            foreach (var profileToAdd in profileMaps)
+            foreach (var profileMap in profileMaps)
             {
-                if (_profileMaps.Contains(profileToAdd))
-                {
-                    throw new InvalidOperationException("There is already");
-                }
-
-                _profileMaps.Add(profileToAdd);
+                _profileMaps.Add(profileMap.Identity, profileMap);
             }
         }
 
         public ProfileMap GetProfileMap<TSource, TReceiver>(TSource source)
         {
             var typePair = TypePair.Create<TSource, TReceiver>();
-            var profileMaps = _profileMaps.Where(x => x.TypePair.Equals(typePair)).ToList();
+            var profileMaps = _profileMaps
+                .Select(x => x.Value)
+                .Where(x => x.TypePair.Equals(typePair)).ToList();
 
             if (!profileMaps.Any())
             {
