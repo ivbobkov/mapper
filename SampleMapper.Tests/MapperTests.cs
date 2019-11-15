@@ -37,23 +37,23 @@ namespace SampleMapper.Tests
         //    Assert.Throws<InvalidOperationException>(() => _subject.Map<FakeSource, FakeReceiver>(CreateSource()));
         //}
 
-        //[Test]
-        //public void Mapper_DirectMappingIsConfigured_VerifyMapping()
-        //{
-        //    var profile = new FakeProfile();
-        //    profile.CreateProfile<FakeSource, FakeReceiver>()
-        //        .UseAsDefaultProfile()
-        //        .For(x => x.StringValue, x => x.Do(CreateClause(c => c.StringValue)))
-        //        .For(x => x.IntValue, x => x.Do(CreateClause(c => c.IntValue)));
+        [Test]
+        public void Mapper_DirectMappingIsConfigured_VerifyMapping()
+        {
+            var profile = new MappingProfile();
+            profile.CreateProfile<FakeSource, FakeReceiver>()
+                .UseAsDefaultProfile()
+                .For(x => x.StringValue, x => x.Do(CreateClause(c => c.StringValue)))
+                .For(x => x.IntValue, x => x.Do(CreateClause(c => c.IntValue)));
 
-        //    _mapperConfiguration.LoadProfile(profile);
-        //    var source = CreateSource();
+            _mapperConfiguration.LoadProfile(profile);
+            var source = CreateSource();
 
-        //    var receiver = _subject.Map<FakeSource, FakeReceiver>(source);
+            var receiver = _subject.Map<FakeSource, FakeReceiver>(source);
 
-        //    Assert.AreEqual(source.StringValue, receiver.StringValue);
-        //    Assert.AreEqual(source.IntValue, receiver.IntValue);
-        //}
+            Assert.AreEqual(source.StringValue, receiver.StringValue);
+            Assert.AreEqual(source.IntValue, receiver.IntValue);
+        }
 
         private ExpressionResolver<FakeSource, TReceiverMember> CreateClause<TReceiverMember>(Expression<Func<FakeSource, TReceiverMember>> body)
         {
