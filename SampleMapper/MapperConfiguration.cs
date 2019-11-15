@@ -7,7 +7,7 @@ namespace SampleMapper
 {
     public class MapperConfiguration : IMapperConfiguration
     {
-        private readonly IDictionary<int, ProfileMap> _profileMaps = new Dictionary<int, ProfileMap>();
+        private readonly IDictionary<TypePair, List<ProfileMap>> _profileMaps = new Dictionary<TypePair, List<ProfileMap>>();
 
         public void LoadProfile(MappingProfile mappingProfile)
         {
@@ -15,16 +15,21 @@ namespace SampleMapper
 
             foreach (var profileMap in profileMaps)
             {
-                _profileMaps.Add(profileMap.Identity, profileMap);
+                var typePair = profileMap.TypePair;
+
+                if (!_profileMaps.ContainsKey(typePair))
+                {
+                    _profileMaps.Add(typePair, new List<ProfileMap>());
+                }
+
+                _profileMaps[typePair].Add(profileMap);
             }
         }
 
         public ProfileMap GetProfileMap<TSource, TReceiver>(TSource source)
         {
             var typePair = TypePair.Create<TSource, TReceiver>();
-            var profileMaps = _profileMaps
-                .Select(x => x.Value)
-                .Where(x => x.TypePair.Equals(typePair)).ToList();
+            var profileMaps = _profileMaps[typePair].Where(x => x.TypePair.Equals(typePair)).ToList();
 
             if (!profileMaps.Any())
             {
