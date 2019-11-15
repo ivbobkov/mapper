@@ -16,8 +16,4 @@
     <ProjectReference Include="..\SampleMapper\SampleMapper.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TDM\" />
-  </ItemGroup>
-
 </Project>

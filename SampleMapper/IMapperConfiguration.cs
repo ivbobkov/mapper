@@ -5,7 +5,7 @@ namespace SampleMapper
 {
     public interface IMapperConfiguration
     {
-        void LoadProfile(ProfileBase profile);
+        void LoadProfile(MappingProfile mappingProfile);
         ProfileMap GetProfileMap<TSource, TReceiver>(TSource source);
         Func<TSource, TReceiver> GetMapperFunc<TSource, TReceiver>(TSource source);
     }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SampleMapper.Tests.Mapper.Fakes
+namespace SampleMapper.Tests.Fakes
 {
     public class FakeSource
     {

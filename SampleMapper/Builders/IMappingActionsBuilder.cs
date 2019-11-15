@@ -5,12 +5,12 @@ namespace SampleMapper.Builders
     public interface IMappingActionsBuilder<TSource, TReceiverMember>
     {
         void Do(ValueResolver<TSource, TReceiverMember> resolver);
-        ICanAddDo<TSource, TReceiverMember> If(Condition<TSource> executionClause);
+        ICanAddThenDo<TSource, TReceiverMember> If(Condition<TSource> executionClause);
         IEnumerable<MappingAction> Build();
     }
 
-    public interface ICanAddDo<TSource, TReceiverMember>
+    public interface ICanAddThenDo<TSource, TReceiverMember>
     {
-        void Do(ValueResolver<TSource, TReceiverMember> resolver);
+        void ThenDo(ValueResolver<TSource, TReceiverMember> resolver);
     }
 }

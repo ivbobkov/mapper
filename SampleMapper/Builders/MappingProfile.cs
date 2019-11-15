@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SampleMapper.Builders
 {
-    public abstract class ProfileBase
+    public class MappingProfile
     {
         private readonly List<IProfileMapBuilder> _profileMapBuilders = new List<IProfileMapBuilder>();
 

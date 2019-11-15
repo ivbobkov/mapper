@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using SampleMapper.Helpers;
 
-namespace SampleMapper.Tests.Mapper.Fakes
+namespace SampleMapper.Tests.Fakes
 {
     public class HasCodeCondition : Condition<FakeSource>
     {
@@ -20,14 +21,10 @@ namespace SampleMapper.Tests.Mapper.Fakes
 
         public override int GetHashCode()
         {
-            const int deviation = 5; // any random number
-            var stateHash = Code.GetHashCode();
-            var typeHash = GetType().GetHashCode();
-
-            return ((stateHash << deviation) + stateHash) ^ typeHash;
+            return HashCodeHelper.ResolveHashForType(Code.GetHashCode(), GetType());
         }
 
-        public static HasCodeCondition Create(string code)
+        public static HasCodeCondition Create<TSource>(string code)
         {
             return new HasCodeCondition(code);
         }

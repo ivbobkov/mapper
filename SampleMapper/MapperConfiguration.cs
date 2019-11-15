@@ -10,9 +10,9 @@ namespace SampleMapper
     {
         private readonly HashSet<ProfileMap> _profileMaps = new HashSet<ProfileMap>();
 
-        public void LoadProfile(ProfileBase profile)
+        public void LoadProfile(MappingProfile mappingProfile)
         {
-            var profileMaps = profile.BuildProfileMaps();
+            var profileMaps = mappingProfile.BuildProfileMaps();
 
             foreach (var profileToAdd in profileMaps)
             {
