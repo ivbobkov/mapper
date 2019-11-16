@@ -7,9 +7,8 @@ namespace SampleMapper
 {
     public class MapperConfiguration : IMapperConfiguration
     {
-        private readonly IDictionary<TypePair, List<ProfileMap>> _profileMaps =
-            new Dictionary<TypePair, List<ProfileMap>>();
-
+        // TODO: to concurent ?
+        private readonly IDictionary<TypePair, List<ProfileMap>> _profileMaps = new Dictionary<TypePair, List<ProfileMap>>();
         private readonly IDictionary<int, Delegate> _mapperFunctions = new Dictionary<int, Delegate>();
 
         public void LoadProfile(MappingProfile mappingProfile)
@@ -32,12 +31,15 @@ namespace SampleMapper
         public ProfileMap GetProfileMap<TSource, TReceiver>(TSource source)
         {
             var typePair = TypePair.Create<TSource, TReceiver>();
-            var profileMaps = _profileMaps[typePair].Where(x => x.TypePair.Equals(typePair)).ToList();
 
-            if (!profileMaps.Any())
+            if (!_profileMaps.ContainsKey(typePair))
             {
                 throw new InvalidOperationException("No profiles added for given type pair");
             }
+
+            var profileMaps = _profileMaps[typePair]
+                .Where(x => x.TypePair.Equals(typePair))
+                .ToList();
 
             var profilesMatchedByCondition = profileMaps
                 .Where(c => ((Condition<TSource>)c.ExecutionClause).IsMatch(source) && !c.IsDefault)
@@ -68,82 +70,57 @@ namespace SampleMapper
             throw new InvalidOperationException("No fallback profile");
         }
 
-        // TODO: cache it
         public Func<TSource, TReceiver> GetMapperFunc<TSource, TReceiver>(TSource source)
         {
             var profileMap = GetProfileMap<TSource, TReceiver>(source);
-            var typePair = profileMap.TypePair;
 
-            if (_mapperFunctions.ContainsKey(profileMap.Identity))
+            if (_mapperFunctions.TryGetValue(profileMap.Identity, out var mapperFunc))
             {
+                return (Func<TSource, TReceiver>) mapperFunc;
             }
 
-            return CreateMapperFunc<TSource, TReceiver>(profileMap);
+            var compiledFunc = CompileMapperFunc<TSource, TReceiver>(profileMap);
+            _mapperFunctions.Add(profileMap.Identity, compiledFunc);
+
+            return compiledFunc;
         }
 
-        private Func<TSource, TReceiver> CreateMapperFunc<TSource, TReceiver>(ProfileMap profileMap)
+        private static Func<TSource, TReceiver> CompileMapperFunc<TSource, TReceiver>(ProfileMap profileMap)
         {
-            Expression<Func<TSource, PropertyMap, LambdaExpression>> valueResolverExpression =
-                (source, propertyMap) => propertyMap.MappingActions
-                    .Single(x => ((Condition<TSource>) x.ExecutionClause).IsMatch(source))
-                    .ValueResolver
-                    .AsLambda();
+            var expressions = new List<Expression>();
+            var sourceParameter = Expression.Parameter(typeof(TSource));
+            var receiverVariable = Expression.Variable(typeof(TReceiver));
 
-            var sourceParameter = Expression.Parameter(typeof(TSource), "source");
-            //var profileMapParameter = Expression.Parameter(typeof(ProfileMap), "profileMap");
-            var receiverVariable = Expression.Variable(typeof(TReceiver), "receiver");
+            expressions.Add(Expression.Assign(receiverVariable, Expression.New(profileMap.ReceiverConstructorInfo)));
 
-            var expressions = new List<Expression>
-            {
-                Expression.Assign(receiverVariable, Expression.New(profileMap.ReceiverConstructorInfo))
-            };
-
-            // TODO: check in expression
             foreach (var propertyMap in profileMap.PropertyMaps)
             {
-                var propertyMapVariable = Expression.Variable(typeof(PropertyMap));
-                expressions.Add(Expression.Assign(propertyMapVariable, Expression.Constant(propertyMap)));
+                var receiverProperty = Expression.Property(receiverVariable, propertyMap.ReceiverProperty);
+                var toNextPropertyLabel = Expression.Label();
 
-                var check0 = Expression.Block(
-                    new[] {sourceParameter, propertyMapVariable},
-                    valueResolverExpression
-                );
+                foreach (var mappingAction in propertyMap.MappingActions)
+                {
+                    var resolvedMemberValue = Expression.Invoke(mappingAction.ValueResolver.AsLambda(), sourceParameter);
 
-                //InvocationExpression resolverExpression = Expression.Invoke(
-                //    valueResolverExpression,
-                //    sourceParameter,
-                //    propertyMapVariable);
+                    var ifThen = Expression.IfThen(
+                        Expression.Invoke(mappingAction.ExecutionClause.AsLambda(), sourceParameter),
+                        Expression.Block(
+                            Expression.Assign(receiverProperty, resolvedMemberValue),
+                            Expression.Goto(toNextPropertyLabel)
+                        )
+                    );
 
-                //var temp = Expression.Variable(typeof(LambdaExpression));
-                //var t1 = Expression.Assign(temp, resolverExpression);
-                //expressions.Add(resolverExpression);
+                    expressions.Add(ifThen);
+                }
 
-                //var sourceValue = Expression.Call(resolverExpression, sourceParameter);
-                var sourceValue = Expression.Invoke(check0, sourceParameter, propertyMapVariable);
-                var receiverMember = Expression.Property(receiverVariable, propertyMap.ReceiverProperty);
-                expressions.Add(Expression.Assign(receiverMember, sourceValue));
-
-                //var sourceValue = Expression.Invoke(mappingAction.ValueResolver.AsLambda(), sourceParameter);
-                //var receiverMember = Expression.Property(receiverVariable, propertyMap.ReceiverProperty);
-                //expressions.Add(Expression.Assign(receiverMember, sourceValue));
-
-                //foreach (var mappingAction in propertyMap.MappingActions)
-                //{
-                //    if (((Condition<TSource>)mappingAction.ExecutionClause).IsMatch(source))
-                //    {
-                //        var sourceValue = Expression.Invoke(mappingAction.ValueResolver.AsLambda(), sourceParameter);
-                //        var receiverMember = Expression.Property(receiverInstance, propertyMap.ReceiverProperty);
-                //        expressions.Add(Expression.Assign(receiverMember, sourceValue));
-                //    }
-                //}
-
+                expressions.Add(Expression.Label(toNextPropertyLabel));
             }
 
             expressions.Add(receiverVariable);
-
-            //var body = Expression.Block(new[] { receiverVariable }, expressions);
             var body = Expression.Block(new[] { receiverVariable }, expressions);
-            return Expression.Lambda<Func<TSource, TReceiver>>(body, sourceParameter).Compile();
+            var lambda = Expression.Lambda<Func<TSource, TReceiver>>(body, sourceParameter);
+
+            return lambda.Compile();
         }
     }
 }

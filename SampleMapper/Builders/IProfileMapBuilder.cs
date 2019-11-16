@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace SampleMapper.Builders
@@ -12,7 +13,9 @@ namespace SampleMapper.Builders
     {
         IProfileMapBuilder<TSource, TReceiver> UseExecutionClause(Condition<TSource> executionClause);
 
-        IProfileMapBuilder<TSource, TReceiver> UseAsDefaultProfile();
+        IProfileMapBuilder<TSource, TReceiver> UseAsDefault();
+
+        IProfileMapBuilder<TSource, TReceiver> Include(IEnumerable<PropertyMap> propertyMaps);
 
         IProfileMapBuilder<TSource, TReceiver> For<TReceiverMember>(
             Expression<Func<TReceiver, TReceiverMember>> member,

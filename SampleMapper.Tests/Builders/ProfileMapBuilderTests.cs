@@ -27,7 +27,7 @@ namespace SampleMapper.Tests.Builders
         public void UseExecutionClause_UseAsDefaultIsAlreadySet_Throws()
         {
             var exception = Assert.Throws<InvalidOperationException>(() => _subject
-                .UseAsDefaultProfile()
+                .UseAsDefault()
                 .UseExecutionClause(new BlankCondition<FakeSource>()));
 
             Assert.AreEqual("You could not use execution clause for default profile", exception.Message);
@@ -38,7 +38,7 @@ namespace SampleMapper.Tests.Builders
         {
             var exception = Assert.Throws<InvalidOperationException>(() => _subject
                 .UseExecutionClause(new BlankCondition<FakeSource>())
-                .UseAsDefaultProfile());
+                .UseAsDefault());
 
             Assert.AreEqual("Profile with execution clause could not be default", exception.Message);
         }
@@ -55,7 +55,7 @@ namespace SampleMapper.Tests.Builders
         public void Build_NoPropertyMapsConfigured_Throws()
         {
             var exception = Assert.Throws<InvalidOperationException>(() => _subject
-                .UseAsDefaultProfile()
+                .UseAsDefault()
                 .Build());
 
             Assert.AreEqual("No property maps configured", exception.Message);
@@ -67,7 +67,7 @@ namespace SampleMapper.Tests.Builders
             var subject = new ProfileMapBuilder<FakeSource, ClassWithoutDefaultConstructor>();
 
             var exception = Assert.Throws<ArgumentException>(() => subject
-                .UseAsDefaultProfile()
+                .UseAsDefault()
                 .For(x => x.Property, x => x.Do(new BlankResolver<FakeSource, string>()))
                 .Build());
 
@@ -78,7 +78,7 @@ namespace SampleMapper.Tests.Builders
         public void For_ThereIsAlreadyAddedPropertyMap_ReplaceByNewOne()
         {
             var profileMap = _subject
-                .UseAsDefaultProfile()
+                .UseAsDefault()
                 .For(x => x.StringValue, x => x.Do(new BlankResolver<FakeSource, string>()))
                 .For(x => x.StringValue, x => x.Do(new ExpressionResolver<FakeSource, string>(c => c.StringValue)))
                 .Build();

@@ -29,7 +29,7 @@ namespace SampleMapper.Builders
             return this;
         }
 
-        public IProfileMapBuilder<TSource, TReceiver> UseAsDefaultProfile()
+        public IProfileMapBuilder<TSource, TReceiver> UseAsDefault()
         {
             if (_executionClause != null)
             {
@@ -38,6 +38,29 @@ namespace SampleMapper.Builders
 
             _isDefault = true;
             _executionClause = new BlankCondition<TSource>();
+
+            return this;
+        }
+
+        public IProfileMapBuilder<TSource, TReceiver> Include(IEnumerable<PropertyMap> propertyMaps)
+        {
+            if (propertyMaps == null)
+            {
+                throw new ArgumentNullException(nameof(propertyMaps));
+            }
+
+            var typePair = TypePair.Create<TSource, TReceiver>();
+            var propertyMapsList = propertyMaps.ToList();
+
+            if (!propertyMapsList.Any(c => c.TypePair.Equals(typePair)))
+            {
+                throw new ArgumentException("Property map for different type pair received");
+            }
+
+            foreach (var propertyMap in propertyMapsList)
+            {
+                AddOrReplacePropertyMap(propertyMap);
+            }
 
             return this;
         }
@@ -52,8 +75,7 @@ namespace SampleMapper.Builders
                 .AddSetupAction(setupAction)
                 .Build();
 
-            _propertyMaps.RemoveAll(x => x.ReceiverProperty.Equals(propertyMap.ReceiverProperty));
-            _propertyMaps.Add(propertyMap);
+            AddOrReplacePropertyMap(propertyMap);
 
             return this;
         }
@@ -78,6 +100,12 @@ namespace SampleMapper.Builders
                 _executionClause,
                 _isDefault,
                 _propertyMaps);
+        }
+
+        private void AddOrReplacePropertyMap(PropertyMap propertyMap)
+        {
+            _propertyMaps.RemoveAll(x => x.ReceiverProperty.Equals(propertyMap.ReceiverProperty));
+            _propertyMaps.Add(propertyMap);
         }
 
         private ConstructorInfo GetReceiverConstructorInfo(Type receiverType)

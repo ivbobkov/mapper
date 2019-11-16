@@ -22,12 +22,12 @@ namespace SampleMapper.Tests
             {
                 _subject
                     .CreateProfile<FakeSource, FakeReceiver>()
-                    .UseAsDefaultProfile()
+                    .UseAsDefault()
                     .For(x => x.StringValue, x => x.Do(NoAction<string>()));
 
                 _subject
                     .CreateProfile<FakeSource, FakeReceiver>()
-                    .UseAsDefaultProfile()
+                    .UseAsDefault()
                     .For(x => x.IntValue, x => x.Do(NoAction<int>()));
 
                 _subject.BuildProfileMaps();

@@ -53,7 +53,10 @@ namespace SampleMapper.Builders
                 throw new InvalidOperationException("You must configure mapping actions before build");
             }
 
-            return new PropertyMap(_receiverProperty, _mappingActions);
+            return new PropertyMap(
+                TypePair.Create<TSource, TReceiver>(),
+                _receiverProperty,
+                _mappingActions);
         }
     }
 }
