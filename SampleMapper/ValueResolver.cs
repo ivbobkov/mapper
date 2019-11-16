@@ -5,18 +5,14 @@ namespace SampleMapper
 {
     public abstract class ValueResolver<TSource, TReceiverMember> : IValueResolver
     {
-        // TODO: LAZY ?
-        private Expression<Func<TSource, TReceiverMember>> _resolverExpression;
+        private readonly Lazy<Expression<Func<TSource, TReceiverMember>>> _resolverExpression;
 
-        public LambdaExpression AsLambda()
+        protected ValueResolver()
         {
-            if (_resolverExpression == null)
-            {
-                _resolverExpression = CreateResolver();
-            }
+            _resolverExpression = new Lazy<Expression<Func<TSource, TReceiverMember>>>(() => CreateResolver());
+        }
 
-            return _resolverExpression;
-        } 
+        public LambdaExpression AsLambda() => _resolverExpression.Value;
 
         protected abstract Expression<Func<TSource, TReceiverMember>> CreateResolver();
     }
