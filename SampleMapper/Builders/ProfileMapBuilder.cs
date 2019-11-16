@@ -42,7 +42,7 @@ namespace SampleMapper.Builders
             return this;
         }
 
-        public IProfileMapBuilder<TSource, TReceiver> Include(IEnumerable<PropertyMap> propertyMaps)
+        public IProfileMapBuilder<TSource, TReceiver> UsePropertyMaps(IEnumerable<PropertyMap> propertyMaps)
         {
             if (propertyMaps == null)
             {

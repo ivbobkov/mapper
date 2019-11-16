@@ -69,7 +69,7 @@ namespace SampleMapper.Tests
         }
 
         [Test]
-        public void Map_IncludedPropertyMaps_CheckOverloading()
+        public void Map_UsedPropertyMaps_CheckOverloading()
         {
             var propertyMaps = PropertyMapsBuilder<FakeSource, FakeReceiver>.Create()
                 .For(x => x.IntValue, x => x.Do(ExpressionResolve(c => 10)))
@@ -79,7 +79,7 @@ namespace SampleMapper.Tests
             var profile = new MappingProfile();
             profile.CreateProfile<FakeSource, FakeReceiver>()
                 .UseAsDefault()
-                .Include(propertyMaps)
+                .UsePropertyMaps(propertyMaps)
                 .For(x => x.IntValue, x => x.Do(ExpressionResolve(c => -5)));
 
             _mapperConfiguration.LoadProfile(profile);

@@ -15,7 +15,7 @@ namespace SampleMapper.Builders
 
         IProfileMapBuilder<TSource, TReceiver> UseAsDefault();
 
-        IProfileMapBuilder<TSource, TReceiver> Include(IEnumerable<PropertyMap> propertyMaps);
+        IProfileMapBuilder<TSource, TReceiver> UsePropertyMaps(IEnumerable<PropertyMap> propertyMaps);
 
         IProfileMapBuilder<TSource, TReceiver> For<TReceiverMember>(
             Expression<Func<TReceiver, TReceiverMember>> member,
